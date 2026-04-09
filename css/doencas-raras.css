@@ -1,0 +1,15 @@
+
+:root {
+    --doencas-raras: #8b5cf6;
+    --doencas-raras-dark: #4c1d95;
+    --doencas-raras-glow: #8b5cf640;
+}
+
+.badge-neon { border-color: var(--doencas-raras); color: var(--doencas-raras); }
+.gradient-text-doencas-raras { background: linear-gradient(to right, #fff, var(--doencas-raras)); -webkit-background-clip: text; color: transparent; }
+.btn-doencas-raras { background: linear-gradient(135deg, var(--doencas-raras-dark), transparent); border-color: var(--doencas-raras); color: #fff; }
+.btn-doencas-raras:hover { background: var(--doencas-raras); box-shadow: 0 0 20px var(--doencas-raras-glow); }
+.icon-doencas-raras { color: var(--doencas-raras); border-color: var(--doencas-raras-glow); background: rgba(0,0,0,0.3); }
+.timeline-dot { border-color: var(--doencas-raras); box-shadow: 0 0 15px var(--doencas-raras-glow); }
+.timeline-date { color: var(--doencas-raras); }
+.ecg-svg { stroke: var(--doencas-raras); filter: drop-shadow(0 0 8px var(--doencas-raras)); }

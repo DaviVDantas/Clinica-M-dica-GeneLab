@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneLab - Genética e Biotecnologia</title>
+
+    <!-- Fontes -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================================================
+           1. VARIÁVEIS DE TEMA (DARK / LIGHT)
+           ========================================================================== */
+        :root {
+            /* Dark Theme (Default) */
+            --bg-base: #02040a;
+            --bg-surface: rgba(10, 14, 23, 0.5);
+            --bg-surface-hover: rgba(15, 20, 35, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #00f0ff;
+            --secondary: #a45cff;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --glow-spread: rgba(0, 240, 255, 0.15);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        :root[data-theme="light"] {
+            /* Light Theme */
+            --bg-base: #f1f5f9;
+            --bg-surface: rgba(255, 255, 255, 0.7);
+            --bg-surface-hover: rgba(255, 255, 255, 0.9);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #0284c7;
+            --secondary: #7c3aed;
+            --glass-border: rgba(15, 23, 42, 0.1);
+            --glass-highlight: rgba(15, 23, 42, 0.2);
+            --glow-spread: rgba(2, 132, 199, 0.15);
+            --shadow-lg: 0 30px 60px rgba(15, 23, 42, 0.1);
+        }
+
+        /* ==========================================================================
+           2. RESET & BASE
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 901px) {
+            * {
+                cursor: none !important;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        a,
+        button,
+        input,
+        select,
+        label {
+            pointer-events: auto;
+        }
+
+        /* ==========================================================================
+           3. BACKGROUND 3D & CURSOR
+           ========================================================================== */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        #cursor {
+            position: fixed;
+            width: 34px;
+            height: 34px;
+            transform: translate(-50%, -50%);
+            pointer-events: none !important;
+            z-index: 2147483647;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        #cursor svg {
+            width: 100%;
+            height: 100%;
+            color: var(--primary);
+            filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.8));
+            animation: spinDNA 3s linear infinite;
+        }
+
+        @keyframes spinDNA {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #cursor-blur {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none !important;
+            z-index: 2147483646;
+            transition: 0.1s ease-out;
+            opacity: 0;
+        }
+
+        .hovering-link #cursor {
+            transform: translate(-50%, -50%) scale(1.6);
+        }
+
+        .hovering-link #cursor svg {
+            animation: spinDNA 1s linear infinite;
+            filter: drop-shadow(0 0 12px var(--primary));
+            color: var(--text-main);
+        }
+
+        .hovering-link #cursor-blur {
+            opacity: 0 !important;
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        /* ==========================================================================
+           4. TYPOGRAPHY & UTILITIES
+           ========================================================================== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--text-main), var(--primary), var(--secondary), var(--text-main));
+            background-size: 300% auto;
+            animation: gradientShift 6s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 300% center;
+            }
+        }
+
+        .animated {
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+            }
+
+            100% {
+                text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 1.2rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--primary);
+        }
+
+        /* Botão Premium */
+        .btn-premium {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 2.5rem;
+            border-radius: 100px;
+            background: var(--bg-surface);
+            border: 1px solid var(--glass-highlight);
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-premium::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-20deg);
+            transition: 0.6s ease;
+        }
+
+        .btn-premium:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--glow-spread);
+            transform: translateY(-3px);
+            background: var(--bg-surface-hover);
+        }
+
+        .btn-premium:hover::after {
+            left: 150%;
+        }
+
+        /* ==========================================================================
+           5. NAVBAR
+           ========================================================================== */
+        .glass-nav {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1.5rem 0.8rem 2rem;
+            background: rgba(10, 14, 23, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+        }
+
+        :root[data-theme="light"] .glass-nav {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-nav.scrolled {
+            top: 1rem;
+            background: rgba(10, 14, 23, 0.85);
+            border-color: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        :root[data-theme="light"] .glass-nav.scrolled {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(2, 132, 199, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* ==========================================================================
+           6. DNA SCROLL SECTION
+           ========================================================================== */
+        .scroll-container {
+            position: relative;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 0 5%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .section.align-left {
+            justify-content: flex-start;
+        }
+
+        .section.align-right {
+            justify-content: flex-end;
+        }
+
+        .section-content {
+            background: var(--bg-surface);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            padding: 3.5rem;
+            border-radius: 32px;
+            max-width: 550px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+        }
+
+        .section-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.1;
+            color: var(--text-main);
+        }
+
+        .section-content p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .section-content img {
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        .scroll-indicator-custom {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--primary);
+        }
+
+        .mouse-line {
+            width: 2px;
+            height: 40px;
+            background: rgba(0, 240, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mouse-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: var(--primary);
+            animation: scrollLine 2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+        }
+
+        @keyframes scrollLine {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(200%);
+            }
+        }
+
+        /* ==========================================================================
+           7. BENTO GRID E LAYOUTS (SOBRE/ESPECIALIDADES/CONTATO)
+           ========================================================================== */
+        .content-section {
+            padding: 8rem 0;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+        }
+
+        .bento-grid-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .bento-grid-bottom {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .sobre-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .contato-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: stretch;
+        }
+
+        .glass-panel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 32px;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-surface);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--bg-base) 0%, transparent 80%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .glass-panel img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+            transition: transform 0.6s, opacity 0.6s;
+            z-index: 0;
+        }
+
+        .glass-panel:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg), 0 0 30px var(--glow-spread);
+            transform: translateY(-5px);
+        }
+
+        .glass-panel:hover img {
+            transform: scale(1.05);
+            opacity: 0.7;
+        }
+
+        .glass-panel .glowing-border {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, var(--primary), transparent, var(--secondary)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 3;
+        }
+
+        .glass-panel:hover .glowing-border {
+            opacity: 1;
+        }
+
+        .panel-content {
+            position: relative;
+            z-index: 2;
+            padding: 2.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .glass-panel h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .glass-panel p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .learn-more {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .glass-panel:hover .learn-more {
+            gap: 10px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* ==========================================================================
+           8. SERVIÇOS E EQUIPA (TILT CARDS)
+           ========================================================================== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .tilt-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-lg);
+            transition: border-color 0.3s;
+            position: relative;
+        }
+
+        .tilt-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, var(--primary), transparent) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 10;
+        }
+
+        .tilt-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(0, 240, 255, 0.15);
+        }
+
+        .tilt-card:hover::before {
+            opacity: 1;
+        }
+
+        .tilt-card-img {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tilt-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: transform 0.5s;
+        }
+
+        .tilt-card:hover .tilt-card-img img {
+            transform: scale(1.05);
+        }
+
+        .tilt-card-img::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to top, var(--bg-surface), transparent);
+        }
+
+        .tilt-card-content {
+            padding: 2rem;
+        }
+
+        .tilt-card h3 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 0.8rem;
+        }
+
+        .tilt-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-card {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-card:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* ==========================================================================
+           9. MAPA, FORMULÁRIO E FOOTER
+           ========================================================================== */
+        .map-frame {
+            width: 100%;
+            height: 100%;
+            min-height: 250px;
+            border: 0;
+            filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(110%);
+            transition: filter 0.5s;
+        }
+
+        :root[data-theme="light"] .map-frame {
+            filter: none;
+        }
+
+        .form-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(24px);
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-family: inherit;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        :root[data-theme="light"] .form-control {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-control:focus {
+            outline: none;
+            transform: translateY(-3px);
+            background: rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.1), inset 0 0 0 1px var(--primary);
+        }
+
+        footer {
+            background: var(--bg-base);
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 0 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.5;
+        }
+
+        footer .nav-links {
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Efeitos de Fundo (Blobs) */
+        .bg-blob {
+            position: absolute;
+            filter: blur(90px);
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+            border-radius: 50%;
+            animation: floatBlob 12s infinite alternate ease-in-out;
+        }
+
+        .blob-primary {
+            background: var(--primary);
+        }
+
+        .blob-secondary {
+            background: var(--secondary);
+            opacity: 0.15;
+        }
+
+        @keyframes floatBlob {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(40px, -40px) scale(1.1);
+            }
+        }
+
+        @keyframes floatBox {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Animações de Reveal e Texturas */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .glass-panel::after,
+        .tilt-card::after,
+        .form-container::after,
+        .section-content::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.04;
+            mix-blend-mode: overlay;
+            border-radius: inherit;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        :root[data-theme="light"] .glass-panel::after,
+        :root[data-theme="light"] .tilt-card::after,
+        :root[data-theme="light"] .form-container::after {
+            opacity: 0.015;
+        }
+
+        .btn-premium.pulse {
+            animation: premiumPulse 2.5s infinite;
+        }
+
+        @keyframes premiumPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(0, 240, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 240, 255, 0);
+            }
+        }
+
+        .nav-links a:not(.btn-premium) {
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a:not(.btn-premium)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:not(.btn-premium):hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 900px) {
+            .section {
+                padding: 0 2rem;
+                justify-content: center !important;
+            }
+
+            .section-content {
+                max-width: 100%;
+                padding: 2rem;
+            }
+
+            .bento-grid-top,
+            .bento-grid-bottom,
+            .sobre-grid,
+            .contato-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .glass-nav {
+                padding: 1rem 1.5rem;
+                width: 95%;
+                top: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            * {
+                cursor: auto !important;
+            }
+
+            #cursor,
+            #cursor-blur {
+                display: none !important;
+            }
+
+            .floating-cert-card {
+                position: relative !important;
+                bottom: auto !important;
+                right: auto !important;
+                width: 100% !important;
+                margin-top: -30px !important;
+                z-index: 10 !important;
+            }
+
+            .sobre-content-mobile {
+                padding-left: 0 !important;
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Cursores Customizados -->
+    <div id="cursor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M7 3v3c0 3 10 5 10 10v5" />
+            <path d="M17 3v3c0 3-10 5-10 10v5" />
+            <path d="M7 6h10" />
+            <path d="M9 10h6" />
+            <path d="M9 14h6" />
+            <path d="M7 18h10" />
+        </svg>
+    </div>
+    <div id="cursor-blur"></div>
+
+    <!-- Fundo 3D Three.js -->
+    <div id="canvas-container"></div>
+
+    <!-- Navegação Superior -->
+    <nav class="glass-nav">
+        <div class="logo">Gene<span>Lab</span></div>
+        <ul class="nav-links">
+            <li><a href="#dna-section">O DNA</a></li>
+            <li><a href="#sobre">Sobre Nós</a></li>
+            <li><a href="#especialidades">Especialidades</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#equipe">Equipe</a></li>
+            <li><a href="#contato" class="btn-premium pulse magnetic">Contactar</a></li>
+        </ul>
+    </nav>
+
+    <div id="dna-section" class="scroll-container">
+
+        <section class="section align-left">
+            <div class="section-content visible">
+                <span class="badge" style="margin-bottom: 1rem;">Centro de Especialidade Genética</span>
+                <h1 style="font-size: 3.5rem; margin-bottom: 1rem; line-height: 1;">A Molécula<br><span
+                        class="gradient-text animated">da Vida</span></h1>
+                <p>O ADN é o seu manual de instruções biológicas contendo o segredo do funcionamento de todo o seu
+                    organismo. Na GeneLab, destacamo-nos como uma clínica ultra-especializada na leitura deste
+                    fantástico código.</p>
+                <div class="scroll-indicator-custom">
+                    <div class="mouse-line"></div>
+                    INICIAR MAPEAMENTO
+                </div>
+            </div>
+        </section>
+
+        <section class="section align-right">
+            <div class="section-content">
+                <img src="images/dupla-helice-bg.png" alt="Tecnologia">
+                <span class="badge"
+                    style="margin-bottom: 1rem; border-color: rgba(164,92,255,0.4); color: var(--secondary); background: rgba(164,92,255,0.1);">Tecnologia
+                    de Sequenciação</span>
+                <h2>Explorando a Dupla Hélice</h2>
+                <p>Enquanto a estrutura interior protege os seus fragmentos genéticos contra corrupções celulares, os
+                    nossos modernos laboratórios utilizam tecnologia de ponta para identificar qualquer anomalia com
+                    99,9% de precisão clínica.</p>
+            </div>
+        </section>
+
+        <section class="section align-left">
+            <div class="section-content">
+                <img src="images/prevencao-bg.png" alt="Prevenção">
+                <span class="badge" style="margin-bottom: 1rem;">Aconselhamento Analítico</span>
+                <h2>Código e Prevenção</h2>
+                <p>A nossa equipa dedicada de geneticistas avalia minuciosamente toda a complexidade estrutural para
+                    antecipar síndromes e investigar predisposições da sua família antes que se manifestem clinicamente.
+                </p>
+            </div>
+        </section>
+
+        <section class="section align-right">
+            <div class="section-content">
+                <img src="images/saude-personalizada-bg.png" alt="Medicina Personalizada">
+                <span class="badge"
+                    style="margin-bottom: 1rem; border-color: rgba(164,92,255,0.4); color: var(--secondary); background: rgba(164,92,255,0.1);">O
+                    Futuro da Medicina Genética</span>
+                <h2>Sua Saúde, Personalizada</h2>
+                <p>O diagnóstico das sequências abre as portas para a medicina de precisão. Transformamos o seu genoma
+                    numa janela para terapias orientadas e tratamentos focados de forma individual.</p>
+            </div>
+        </section>
+
+        <div style="height: 15vh;"></div>
+    </div>
+
+    <!-- QUEM SOMOS SECTION -->
+    <div class="content-section" id="sobre"
+        style="padding: 10rem 0; background: linear-gradient(180deg, rgba(2,4,10,0.95) 0%, rgba(10,14,23,0.7) 100%); position: relative; border-top: 1px solid rgba(255,255,255,0.03);">
+
+        <!-- Animated Background Grid -->
+        <div
+            style="position: absolute; inset: 0; background-image: radial-gradient(rgba(0,240,255,0.05) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.5; pointer-events: none; z-index: 0;">
+        </div>
+
+        <div class="bg-blob blob-secondary"
+            style="top: 10%; left: -5%; width: 600px; height: 600px; filter: blur(150px); opacity: 0.15;"></div>
+        <div class="bg-blob blob-primary"
+            style="bottom: -10%; right: 10%; width: 500px; height: 500px; filter: blur(120px); opacity: 0.1;"></div>
+
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="sobre-grid">
+
+                <!-- Coluna Visual Completa -->
+                <div class="reveal" style="position: relative; perspective: 1000px;">
+                    <!-- Glow de fundo para destacar a imagem -->
+                    <div
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 90%; background: var(--primary); filter: blur(120px); opacity: 0.2; z-index: 0; border-radius: 50%;">
+                    </div>
+
+                    <!-- Imagem Principal (Premium Glassmorphism Frame) -->
+                    <div class="magnetic-card"
+                        style="position: relative; z-index: 1; border-radius: 40px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.05); height: 550px; background: var(--bg-surface); transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+
+                        <div class="glowing-border" style="opacity: 0.5;"></div>
+
+                        <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&q=80&w=800&h=800"
+                            alt="Laboratório GeneLab"
+                            style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7) saturate(1.2) contrast(1.1); transform: translateZ(20px) scale(1.05);">
+
+                        <div
+                            style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(2,4,10,0.95) 0%, rgba(2,4,10,0.2) 50%, transparent 100%); transform: translateZ(30px);">
+                        </div>
+
+                        <!-- Decorative Tech Lines -->
+                        <div
+                            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px); background-size: 50px 100%; opacity: 0.5; transform: translateZ(40px);">
+                        </div>
+                    </div>
+
+                    <!-- Cartão Flutuante (Floating Card) Ultra Premium -->
+                    <div class="glass-panel floating-cert-card"
+                        style="position: absolute; bottom: -20px; right: -40px; z-index: 10; padding: 1.8rem; border-radius: 24px; width: 280px; animation: floatBox 6s ease-in-out infinite; background: rgba(5, 7, 15, 0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,240,255,0.05);">
+                        <div class="glowing-border"
+                            style="opacity: 0.8; background: linear-gradient(135deg, var(--primary), transparent, var(--secondary)) border-box;">
+                        </div>
+
+                        <div
+                            style="display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 0.8rem; position: relative; z-index: 2;">
+                            <div
+                                style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(0,240,255,0.05)); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0, 240, 255, 0.4); box-shadow: 0 0 15px rgba(0,240,255,0.2); flex-shrink: 0;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                    stroke-width="2.5">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4
+                                    style="font-size: 1.05rem; color: #fff; margin:0 0 0.2rem 0; font-family: 'Space Grotesk'; letter-spacing: 0.5px;">
+                                    CAP/CLIA</h4>
+                                <p
+                                    style="font-size: 0.75rem; color: var(--primary); margin:0; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.9;">
+                                    Padrão Ouro Mundial</p>
+                            </div>
+                        </div>
+                        <p
+                            style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5; position: relative; z-index: 2;">
+                            Único laboratório com acreditação internacional dual baseada fisicamente em Brasília.</p>
+                    </div>
+                </div>
+
+                <!-- Coluna de Conteúdo -->
+                <div class="sobre-content-mobile reveal delay-1" style="padding-left: 3rem;">
+                    <span class="badge"
+                        style="margin-bottom: 1.5rem; border-color: rgba(164,92,255,0.4); color: var(--secondary); background: rgba(164,92,255,0.1); padding: 0.5rem 1.5rem;">A
+                        Nossa História</span>
+
+                    <h2
+                        style="font-size: 3.8rem; font-weight: 800; color: #fff; line-height: 1.05; margin-bottom: 1.8rem; letter-spacing: -1px;">
+                        Pioneirismo no<br><span class="gradient-text animated" style="text-shadow: none;">Coração do
+                            Brasil</span></h2>
+
+                    <p
+                        style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2.5rem; max-width: 95%;">
+                        A
+                        <strong>GeneLab</strong> nasceu no Distrito Federal com a missão inabalável de trazer o ápice da
+                        medicina genômica mundial para o seu perfil genético. Aliamos a tecnologia NGS de última geração
+                        a uma arquitetura clínica baseada na precisão implacável.
+                    </p>
+
+                    <!-- Lista de Destaques Glass -->
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem;">
+                        <!-- Item 1 -->
+                        <div class="glass-panel"
+                            style="padding: 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 1.2rem; background: rgba(255,255,255,0.015); min-height: auto; transition: all 0.3s; cursor: default;">
+                            <div
+                                style="width: 38px; height: 38px; border-radius: 10px; background: rgba(0,240,255,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 10px rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.2);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <span
+                                style="color: var(--text-main); font-size: 1rem; font-weight: 500; letter-spacing: 0.3px;">Odisseias
+                                Diagnósticas processadas 100% no território nacional (DF).</span>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="glass-panel delay-1"
+                            style="padding: 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 1.2rem; background: rgba(255,255,255,0.015); min-height: auto; transition: all 0.3s; cursor: default;">
+                            <div
+                                style="width: 38px; height: 38px; border-radius: 10px; background: rgba(164,92,255,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 10px rgba(164,92,255,0.1); border: 1px solid rgba(164,92,255,0.2);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <span
+                                style="color: var(--text-main); font-size: 1rem; font-weight: 500; letter-spacing: 0.3px;">Equipa
+                                de geneticistas pós-graduados nos maiores centros globais.</span>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="glass-panel delay-2"
+                            style="padding: 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 1.2rem; background: rgba(255,255,255,0.015); min-height: auto; transition: all 0.3s; cursor: default;">
+                            <div
+                                style="width: 38px; height: 38px; border-radius: 10px; background: rgba(0,240,255,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 10px rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.2);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <span
+                                style="color: var(--text-main); font-size: 1rem; font-weight: 500; letter-spacing: 0.3px;">Aconselhamento
+                                genético pré e pós-teste incluído em cada exame.</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid Premium -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative;">
+
+                        <!-- Top Gradient Divider -->
+                        <div
+                            style="position: absolute; top: -1.5rem; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);">
+                        </div>
+
+                        <div class="reveal delay-1">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-size: 3rem; font-weight: 800; color: var(--text-main); line-height: 1;">
+                                10<span style="font-size:1.6rem; color: var(--primary); margin-left:2px;">+</span></div>
+                            <p
+                                style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top:0.5rem;">
+                                Anos de Prática</p>
+                        </div>
+                        <div class="reveal delay-2">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-size: 3rem; font-weight: 800; color: var(--text-main); line-height: 1;">
+                                50<span style="font-size:1.6rem; color: var(--primary); margin-left:2px;">k</span></div>
+                            <p
+                                style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top:0.5rem;">
+                                Pacientes</p>
+                        </div>
+                        <div class="reveal delay-3">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-size: 3rem; font-weight: 800; color: var(--text-main); line-height: 1;">
+                                99<span style="font-size:1.6rem; color: var(--secondary); margin-left:2px;">%</span>
+                            </div>
+                            <p
+                                style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top:0.5rem;">
+                                Acurácia Exata</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secção Especialidades (Bento Grid) -->
+    <div class="content-section" id="especialidades" style="background: rgba(0,0,0,0.2);">
+        <div class="bg-blob blob-primary" style="top: -10%; left: -5%; width: 500px; height: 500px;"></div>
+        <div class="bg-blob blob-secondary" style="bottom: -10%; right: -5%; width: 600px; height: 600px;"></div>
+        <div class="container reveal">
+            <div class="text-center" style="margin-bottom: 4rem;">
+                <span class="badge" style="margin-bottom: 1rem;">Nossas Especialidades</span>
+                <h2 class="section-title gradient-text animated">Inovação e Precisão</h2>
+                <p class="section-subtitle" style="max-width: 700px; margin: 0 auto;">A GeneLab atua na vanguarda da
+                    genética clínica. Explore as nossas áreas de intervenção principal.</p>
+            </div>
+
+            <!-- Bento Topo -->
+            <div class="bento-grid-top">
+                <div class="glass-panel reveal" onclick="window.location='doencas-raras.html'"
+                    style="min-height: 400px;">
+                    <div class="glowing-border"></div>
+                    <img src="images/doencas-raras-bg.png" alt="Doenças Raras">
+                    <div class="panel-content">
+                        <span class="badge" style="width: fit-content; margin-bottom: 1rem;">Diagnóstico</span>
+                        <h3>Doenças Raras</h3>
+                        <p style="max-width: 80%;">Utilizamos sequenciação de exoma profundo para mapear o seu genoma
+                            completo, resolvendo odisseias diagnósticas que desafiam a medicina tradicional.</p>
+                        <span class="learn-more">Ver Protocolo <svg width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg></span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="glass-panel reveal delay-1" onclick="window.location='oncogenetica.html'"
+                        style="flex: 1;">
+                        <div class="glowing-border"></div>
+                        <img src="images/oncogenetica-bg.png" alt="Onco">
+                        <div class="panel-content">
+                            <h3 style="font-size: 1.4rem;">Oncogenética</h3>
+                            <p>Mapeamento de mutações hereditárias tumorais.</p>
+                            <span class="learn-more">Analisar</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel reveal delay-2" onclick="window.location='cardiogenetica.html'"
+                        style="flex: 1;">
+                        <div class="glowing-border"></div>
+                        <img src="images/cardiogenetica-bg.png" alt="Cardiogenetica">
+                        <div class="panel-content">
+                            <h3 style="font-size: 1.4rem;">Cardiogenética</h3>
+                            <p>Avaliação de risco para arritmias familiares.</p>
+                            <span class="learn-more">Analisar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Fundo -->
+            <div class="bento-grid-bottom">
+                <div class="glass-panel reveal delay-1" onclick="window.location='medicina-fetal.html'"
+                    style="min-height: 250px;">
+                    <div class="glowing-border"></div>
+                    <img src="images/medicina-fetal-bg.png" alt="Medicina Fetal">
+                    <div class="panel-content">
+                        <h3 style="font-size: 1.3rem;">Medicina Fetal</h3>
+                        <p>Aconselhamento e diagnóstico genético pré-natal.</p>
+                    </div>
+                </div>
+                <div class="glass-panel reveal delay-2" onclick="window.location='neurogenetica.html'"
+                    style="min-height: 250px;">
+                    <div class="glowing-border"></div>
+                    <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&q=80&w=500&h=300"
+                        alt="Neurogenetica">
+                    <div class="panel-content">
+                        <h3 style="font-size: 1.3rem;">Neurogenética</h3>
+                        <p>Espectro autista e neurodegeneração.</p>
+                    </div>
+                </div>
+                <div class="glass-panel reveal delay-3" onclick="window.location='farmacogenetica.html'"
+                    style="min-height: 250px;">
+                    <div class="glowing-border"></div>
+                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600&h=350"
+                        alt="Farmacogenômica">
+                    <div class="panel-content">
+                        <h3 style="font-size: 1.3rem;">Farmacogenómica</h3>
+                        <p>Medicação ajustada ao perfil metabólico.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secção Serviços (Tilt Cards) -->
+    <div class="content-section" id="servicos">
+        <div class="container reveal">
+            <div class="text-center" style="margin-bottom: 4rem;">
+                <span class="badge" style="margin-bottom: 1rem;">Catálogo Clínico</span>
+                <h2 class="section-title gradient-text animated">Nossos Serviços</h2>
+                <p class="section-subtitle">Soluções genéticas de precisão para cada dimensão da sua saúde.</p>
+            </div>
+
+            <div class="services-grid">
+                <!-- Card 1 -->
+                <div class="tilt-card magnetic-card reveal">
+                    <div class="tilt-card-img">
+                        <img src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&q=80&w=700&h=400"
+                            alt="Oncológico">
+                        <span class="badge" style="position: absolute; top: 1rem; left: 1rem;">Oncologia</span>
+                    </div>
+                    <div class="tilt-card-content">
+                        <h3>Painel Oncológico Completo</h3>
+                        <p>Análise profunda de dezenas de genes relacionados com cancro. Planos preventivos altamente
+                            direcionados com base no seu perfil.</p>
+                        <a href="#" class="btn-card">Detalhes do Exame</a>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="tilt-card magnetic-card reveal delay-1">
+                    <div class="tilt-card-img">
+                        <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=700&h=400"
+                            alt="Genómica">
+                        <span class="badge"
+                            style="position: absolute; top: 1rem; left: 1rem; color: var(--secondary); border-color: rgba(164,92,255,0.4);">Genómica</span>
+                    </div>
+                    <div class="tilt-card-content">
+                        <h3>Mapeamento Genómico (WGS)</h3>
+                        <p>A sequenciação integral do seu ADN. Descubra propensões estruturais silenciosas e traços
+                            metabólicos que ditam a sua saúde.</p>
+                        <a href="#" class="btn-card"
+                            style="color: var(--secondary); border-color: rgba(164,92,255,0.2);">Detalhes do Exame</a>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="tilt-card magnetic-card reveal delay-2">
+                    <div class="tilt-card-img">
+                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=700&h=400"
+                            alt="Farmacologia">
+                        <span class="badge" style="position: absolute; top: 1rem; left: 1rem;">Farmacologia</span>
+                    </div>
+                    <div class="tilt-card-content">
+                        <h3>Farmacogenómica Aplicada</h3>
+                        <p>Descubra como o seu organismo processa medicamentos, eliminando riscos de toxicidade e
+                            garantindo tratamentos precisos.</p>
+                        <a href="#" class="btn-card">Detalhes do Exame</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secção Equipe -->
+    <div class="content-section" id="equipe" style="background: rgba(0,0,0,0.15);">
+        <div class="container reveal">
+            <div class="text-center" style="margin-bottom: 4rem;">
+                <span class="badge" style="margin-bottom: 1rem;">O nosso Talento</span>
+                <h2 class="section-title gradient-text animated">Equipe de Especialistas</h2>
+                <p class="section-subtitle" style="max-width: 600px; margin: 0 auto;">Conheça a equipe médica e de investigadores de alto nível por trás da nossa precisão genómica.</p>
+            </div>
+
+            <div class="services-grid" style="gap: 3rem;">
+                <!-- Card Equipe 1 -->
+                <div class="tilt-card magnetic-card reveal" style="padding: 0; background: linear-gradient(145deg, #0f121b, #06080e);">
+                    <div class="tilt-card-img" style="height: 340px; position: relative;">
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=600&h=750" alt="Dra. Mariana Costa" style="width: 100%; height: 100%; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.05); filter: contrast(1.1) saturate(1.1);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,8,14,0.95), transparent 60%); pointer-events: none;"></div>
+                        <span class="badge" style="position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); white-space: nowrap; border: 1px solid rgba(0,240,255,0.4); background: rgba(0,0,0,0.6); color: #00f0ff; letter-spacing: 1px; font-size: 0.7rem;">CEO & Médica Chefe</span>
+                    </div>
+                    <div class="tilt-card-content" style="text-align: center; padding: 2rem 1.5rem;">
+                        <h3 style="margin-bottom: 0.4rem; font-size: 1.4rem; font-weight: 800;">Dra. Mariana Costa</h3>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">PhD em Genética Médica</p>
+                    </div>
+                </div>
+                <!-- Card Equipe 2 -->
+                <div class="tilt-card magnetic-card reveal delay-1" style="padding: 0; background: linear-gradient(145deg, #0f121b, #06080e);">
+                    <div class="tilt-card-img" style="height: 340px; position: relative;">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=600&h=750" alt="Dr. Roberto Silva" style="width: 100%; height: 100%; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.05); filter: contrast(1.1) saturate(1.1);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,8,14,0.95), transparent 60%); pointer-events: none;"></div>
+                        <span class="badge" style="position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); white-space: nowrap; border: 1px solid rgba(164,92,255,0.4); background: rgba(0,0,0,0.6); color: #a45cff; letter-spacing: 1px; font-size: 0.7rem;">Diretor Científico</span>
+                    </div>
+                    <div class="tilt-card-content" style="text-align: center; padding: 2rem 1.5rem;">
+                        <h3 style="margin-bottom: 0.4rem; font-size: 1.4rem; font-weight: 800;">Dr. Roberto Silva</h3>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Especialista em Oncogenética</p>
+                    </div>
+                </div>
+                <!-- Card Equipe 3 -->
+                <div class="tilt-card magnetic-card reveal delay-2" style="padding: 0; background: linear-gradient(145deg, #0f121b, #06080e);">
+                    <div class="tilt-card-img" style="height: 340px; position: relative;">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=750" alt="Dra. Helena Mendes" style="width: 100%; height: 100%; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.05); filter: contrast(1.1) saturate(1.1);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,8,14,0.95), transparent 60%); pointer-events: none;"></div>
+                        <span class="badge" style="position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); white-space: nowrap; border: 1px solid rgba(0,240,255,0.3); background: rgba(0,0,0,0.6); color: #00f0ff; letter-spacing: 1px; font-size: 0.7rem;">Biotecnologista Senior</span>
+                    </div>
+                    <div class="tilt-card-content" style="text-align: center; padding: 2rem 1.5rem;">
+                        <h3 style="margin-bottom: 0.4rem; font-size: 1.4rem; font-weight: 800;">Dra. Helena Mendes</h3>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Msc. Farmacogenômica</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secção Contacto -->
+    <div class="content-section" id="contato" style="background: rgba(0,0,0,0.15);">
+        <div class="bg-blob blob-primary" style="bottom: 0; left: -10%; width: 400px; height: 400px;"></div>
+        <div class="container reveal" style="max-width: 1200px;">
+            <div class="text-center" style="margin-bottom: 4rem;">
+                <span class="badge" style="margin-bottom: 1.5rem;">Atendimento e Localização</span>
+                <h2 style="font-size: 3rem; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 1.5rem;">
+                    Inicie sua <span class="gradient-text animated" style="text-shadow:none;">Jornada Genética</span>
+                </h2>
+                <p
+                    style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
+                    Nossa equipe de especialistas está pronta para orientar você sobre os exames mais indicados para o
+                    seu perfil. Visite nossa sede no Distrito Federal ou agende sua consulta virtual.</p>
+            </div>
+
+            <div class="contato-grid">
+                <!-- Lado Esquerdo: Info + Mapa -->
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+
+                    <!-- Box de Endereço e Horários -->
+                    <div
+                        style="display: flex; flex-direction: column; gap: 1.8rem; background: rgba(255,255,255,0.02); padding: 2.5rem; border-radius: 24px; border: 1px solid var(--glass-border); box-shadow: var(--shadow-lg); backdrop-filter: blur(10px);">
+
+                        <!-- Localização (Brasília) -->
+                        <div style="display:flex; align-items:flex-start; gap:1.2rem;">
+                            <div
+                                style="width:48px; height:48px; border-radius:12px; background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.2); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                    stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4
+                                    style="color:var(--text-main); font-size:1.1rem; margin:0 0 0.3rem 0; font-family: 'Space Grotesk';">
+                                    Sede GeneLab - Brasília</h4>
+                                <p style="color:var(--text-muted); font-size:0.95rem; margin:0; line-height:1.5;">Setor
+                                    Hospitalar Local Sul (SHLS)<br>Centro Clínico Sul, Torre A, 5º Andar<br>Brasília -
+                                    DF, CEP 70390-700</p>
+                            </div>
+                        </div>
+
+                        <div
+                            style="height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.05), transparent);">
+                        </div>
+
+                        <!-- Horários -->
+                        <div style="display:flex; align-items:flex-start; gap:1.2rem;">
+                            <div
+                                style="width:48px; height:48px; border-radius:12px; background:rgba(164,92,255,0.08); border:1px solid rgba(164,92,255,0.2); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4
+                                    style="color:var(--text-main); font-size:1.1rem; margin:0 0 0.3rem 0; font-family: 'Space Grotesk';">
+                                    Horário de Funcionamento</h4>
+                                <p style="color:var(--text-muted); font-size:0.95rem; margin:0; line-height:1.5;">
+                                    Segunda a Sexta: 08h00 às 18h00<br>Sábado: 08h00 às 12h00<br>Atendimento presencial
+                                    e telemedicina.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Google Maps Iframe -->
+                    <div
+                        style="flex-grow: 1; border-radius: 24px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                        <iframe class="map-frame"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15354.298285516097!2d-47.9351001!3d-15.8262747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a3ade0387b3cb%3A0xcaf5e8e89eb4ce3!2sSetor%20Hospitalar%20Local%20Sul%20-%20Bras%C3%ADlia%2C%20DF!5e0!3m2!1spt-BR!2sbr!4v1711910000000!5m2!1spt-BR!2sbr"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+
+                </div>
+
+                <!-- Lado Direito: Formulário -->
+                <div class="form-container">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; font-family: 'Space Grotesk';">Pré-Agendamento
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem;">A nossa equipa
+                        clínica garante resposta em até 24h úteis.</p>
+                    <form>
+                        <div class="form-group">
+                            <label>Nome Completo</label>
+                            <input type="text" class="form-control" placeholder="O seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Pessoal</label>
+                            <input type="email" class="form-control" placeholder="email@exemplo.com">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label>Cidade</label>
+                                <input type="text" class="form-control" placeholder="A sua cidade">
+                            </div>
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <input type="text" class="form-control" placeholder="O seu estado">
+                            </div>
+                        </div>
+                        <button type="button" class="btn-premium pulse"
+                            style="width: 100%; margin-top: 1rem; padding: 1.2rem;">Solicitar Contacto</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="logo" style="margin-bottom: 1rem;">Gene<span>Lab</span></div>
+            <p style="margin-bottom: 2rem;">Avanço Científico · Medicina Precisa · Saúde Integral</p>
+            <ul class="nav-links">
+                <li><a href="#dna-section">O ADN</a></li>
+                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="#especialidades">Especialidades</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#equipe">Equipe</a></li>
+                <li><a href="#contato">Contactos</a></li>
+            </ul>
+            <p
+                style="font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--glass-border); padding-top: 2rem;">
+                &copy; 2026 GeneLab Centro de Biotecnologia — Setor Hospitalar Sul, Brasília DF. Todos os direitos
+                reservados.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts de Interação UI e Three.js -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+
+        // 1. Lógica do Tema Claro/Escuro
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+                window.dispatchEvent(new Event('themeChanged'));
+            });
+        }
+
+        // 2. Animações de Scroll e Navbar
+        const navbar = document.querySelector('.glass-nav');
+        const reveals = document.querySelectorAll('.reveal');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const revealTop = reveal.getBoundingClientRect().top;
+                if (revealTop < windowHeight - 100) reveal.classList.add('active');
+            });
+        });
+
+        // 3. Efeitos de Cursor Magnético e Tilt 3D
+        if (window.innerWidth > 900) {
+            const cursor = document.getElementById('cursor');
+            const cursorBlur = document.getElementById('cursor-blur');
+
+            document.addEventListener('mousemove', (e) => {
+                // Torna o cursor visível assim que o rato se move para não ficar preso na origem
+                if (cursor.style.opacity !== '1') cursor.style.opacity = '1';
+                if (!document.body.classList.contains('hovering-link')) cursorBlur.style.opacity = '0.5';
+
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+
+                setTimeout(() => {
+                    cursorBlur.style.left = e.clientX + 'px';
+                    cursorBlur.style.top = e.clientY + 'px';
+                }, 50);
+            });
+
+            document.querySelectorAll('.magnetic, a, button, input, select').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering-link'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering-link'));
+            });
+
+            // Tilt 3D para Cartões
+            document.querySelectorAll('.magnetic-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2; const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -5;
+                    const rotateY = ((x - centerX) / centerX) * 5;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                });
+            });
+        }
+
+        // 4. Configuração Three.js (DNA Dupla Hélice)
+        const container = document.getElementById('canvas-container');
+        if (container) {
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x02040a, 0.015);
+
+            const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(-8, 0, 50);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Iluminação
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            mainLight.position.set(20, 30, 20);
+            scene.add(mainLight);
+            const fillLight = new THREE.DirectionalLight(0x88bbff, 0.5);
+            fillLight.position.set(-20, -20, -20);
+            scene.add(fillLight);
+
+            const composer = new EffectComposer(renderer);
+            composer.addPass(new RenderPass(scene, camera));
+
+            // Grupo DNA
+            const dnaGroup = new THREE.Group();
+            scene.add(dnaGroup);
+
+            const numBasePairs = 250; const radius = 10; const heightObj = 650; const angleStep = Math.PI / 12;
+
+            // Materiais Base (Escuro por defeito)
+            const backboneMat1 = new THREE.MeshStandardMaterial({ color: 0x1f4ca8, roughness: 0.5, metalness: 0.2 });
+            const backboneMat2 = new THREE.MeshStandardMaterial({ color: 0x5a3092, roughness: 0.5, metalness: 0.2 });
+            const bondMat = new THREE.MeshStandardMaterial({ color: 0x555555, transparent: true, opacity: 0.5 });
+
+            const baseColors = [0xb83333, 0xc17215, 0x07814b, 0x0f6fa6, 0x5b369c, 0x1d91a1];
+            const sphereGeo = new THREE.SphereGeometry(1.6, 32, 32);
+            const cylinderGeo = new THREE.CylinderGeometry(0.25, 0.25, radius * 2, 16);
+            const smallSphereGeo = new THREE.SphereGeometry(1.1, 32, 32);
+
+            for (let i = 0; i < numBasePairs; i++) {
+                const y = (i / numBasePairs) * heightObj - heightObj / 2;
+                const angle = i * angleStep;
+                const x1 = Math.cos(angle) * radius; const z1 = Math.sin(angle) * radius;
+                const x2 = Math.cos(angle + Math.PI) * radius; const z2 = Math.sin(angle + Math.PI) * radius;
+
+                const backbone1 = new THREE.Mesh(sphereGeo, backboneMat1); backbone1.position.set(x1, y, z1);
+                const backbone2 = new THREE.Mesh(sphereGeo, backboneMat2); backbone2.position.set(x2, y, z2);
+
+                const bond = new THREE.Mesh(cylinderGeo, bondMat);
+                bond.position.set(0, y, 0); bond.rotation.y = -angle; bond.rotation.z = Math.PI / 2;
+
+                dnaGroup.add(backbone1); dnaGroup.add(backbone2); dnaGroup.add(bond);
+
+                const colorIdx1 = (i * 3 + 1) % baseColors.length;
+                const colorIdx2 = (i * 5 + 4) % baseColors.length;
+
+                const baseA = new THREE.Mesh(smallSphereGeo, new THREE.MeshStandardMaterial({ color: baseColors[colorIdx1], roughness: 0.4 }));
+                baseA.position.set(x1 * 0.45, y, z1 * 0.45);
+                const baseB = new THREE.Mesh(smallSphereGeo, new THREE.MeshStandardMaterial({ color: baseColors[colorIdx2], roughness: 0.4 }));
+                baseB.position.set(x2 * 0.45, y, z2 * 0.45);
+
+                dnaGroup.add(baseA); dnaGroup.add(baseB);
+            }
+
+            // Partículas
+            const posArray = new Float32Array(3000 * 3);
+            for (let i = 0; i < 9000; i += 3) {
+                posArray[i] = (Math.random() - 0.5) * 150;
+                posArray[i + 1] = (Math.random() - 0.5) * heightObj * 1.5;
+                posArray[i + 2] = (Math.random() - 0.5) * 150;
+            }
+            const particlesGeo = new THREE.BufferGeometry();
+            particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMat = new THREE.PointsMaterial({ size: 0.15, color: 0x00f0ff, transparent: true, opacity: 0.3 });
+            const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
+            scene.add(particlesMesh);
+
+            // Alternância de Tema
+            window.addEventListener('themeChanged', () => {
+                const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+                scene.fog.color.setHex(isLight ? 0xf1f5f9 : 0x02040a);
+                ambientLight.intensity = isLight ? 1.5 : 0.8;
+                particlesMat.color.setHex(isLight ? 0x0284c7 : 0x00f0ff);
+            });
+
+            // Lógica de Scroll e Animação
+            const scrollContainer = document.querySelector('.scroll-container');
+            let maxScroll = scrollContainer ? (scrollContainer.offsetHeight - window.innerHeight) : 2000;
+            let targetScrollY = window.scrollY; let scrollY = window.scrollY;
+            let mouseX = 0; let mouseY = 0;
+
+            window.addEventListener('scroll', () => {
+                targetScrollY = window.scrollY;
+                document.querySelectorAll('.section-content').forEach(section => {
+                    if (section.getBoundingClientRect().top < window.innerHeight * 0.8) section.classList.add('visible');
+                });
+            });
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            const clock = new THREE.Clock();
+
+            // Amplitude de movimento cortada em mais de 50% para que o ADN desça de forma muito mais suave e lenta
+            const startY = heightObj / 5; const endY = -heightObj / 5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const elapsedTime = clock.getElapsedTime();
+                scrollY += (targetScrollY - scrollY) * 0.08;
+
+                let scrollProgress = scrollY / Math.max(1, maxScroll);
+                scrollProgress = Math.min(1, Math.max(0, scrollProgress));
+
+                container.style.opacity = scrollProgress > 0.85 ? Math.max(0, 1 - (scrollProgress - 0.85) * (1 / 0.15)) : 1;
+
+                dnaGroup.rotation.y = elapsedTime * 0.15;
+                const currentY = startY - (scrollProgress * (startY - endY));
+
+                camera.position.x += (mouseX * 5 + 20 - camera.position.x) * 0.1;
+                camera.position.z += (mouseY * 5 + 20 - camera.position.z) * 0.1;
+                camera.position.y = currentY;
+                camera.lookAt(0, currentY - 20, 0);
+
+                particlesMesh.rotation.y = elapsedTime * 0.02;
+                particlesMesh.position.y = (elapsedTime * 6) % 150;
+
+                composer.render();
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                composer.setSize(window.innerWidth, window.innerHeight);
+                if (scrollContainer) maxScroll = scrollContainer.offsetHeight - window.innerHeight;
+            });
+        }
+    </script>
+</body>
+
+</html>

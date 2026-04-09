@@ -1,0 +1,251 @@
+/* ULTRA-PREMIUM INDEX.CSS */
+:root {
+    --bg-surface: #0a0e1a;
+    --secondary: #a45cff;
+    --cardio: #06b6d4;
+    --text-main: #ffffff;
+    --text-muted: #8892a4;
+}
+
+/* INDEX SPECIFIC UTILITIES */
+.darker-bg {
+    background-color: #010204;
+    box-shadow: inset 0 20px 50px rgba(0,0,0,0.5), inset 0 -20px 50px rgba(0,0,0,0.5);
+}
+
+.glowing-border {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, rgba(0,240,255,0.4), transparent, rgba(164,92,255,0.4)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    transition: opacity 0.4s;
+    opacity: 0.6;
+}
+.glass-panel:hover .glowing-border {
+    opacity: 1;
+}
+
+.learn-more {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--secondary);
+    transition: all 0.3s;
+}
+.glass-panel:hover .learn-more {
+    transform: translateX(5px);
+    color: #fff;
+    text-shadow: 0 0 10px var(--secondary);
+}
+
+/* BADGE */
+.badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 0.45rem 1.4rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted); backdrop-filter: blur(12px); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+}
+.badge:hover {
+    border-color: rgba(255,255,255,0.3); color: #fff;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
+/* SCROLL INDICATOR */
+.scroll-indicator-custom {
+    position: absolute;
+    bottom: 3rem;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    opacity: 0.7;
+    animation: fadeInOut 3s infinite;
+}
+.mouse-line {
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--secondary), transparent);
+    position: relative;
+    overflow: hidden;
+}
+.mouse-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 50%;
+    background: #fff;
+    animation: scrollLine 2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+@keyframes scrollLine {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(200%); }
+}
+
+/* THEME TOGGLE (Sun/Moon Modern) */
+.themeToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.themeToggleInput {
+    display: none;
+}
+.st-sunMoonThemeToggleBtn {
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s;
+}
+.st-sunMoonThemeToggleBtn:hover {
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+.st-sunMoonThemeToggleBtn svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.sunMoon {
+    transform-origin: center;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.sunRay {
+    transition: opacity 0.3s, transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.themeToggleInput:checked + svg {
+    transform: rotate(40deg);
+}
+.themeToggleInput:checked + svg .sunMoon {
+    transform: scale(0.6);
+}
+.themeToggleInput:checked + svg .sunRay {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+/* DNA SECTION SCROLL ANIMATIONS */
+.section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0 4rem;
+}
+.section.align-left { justify-content: flex-start; }
+.section.align-right { justify-content: flex-end; }
+.section-content {
+    background: rgba(10, 14, 23, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 3.5rem;
+    border-radius: 32px;
+    max-width: 500px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.section-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.section-content h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+}
+.section-content p {
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+
+/* ANIMATED TEXT PULSE */
+.animated {
+    animation: textGlow 3s ease-in-out infinite alternate;
+}
+@keyframes textGlow {
+    0% { text-shadow: 0 0 10px rgba(0,240,255,0.2), 0 0 20px rgba(0,240,255,0.2); }
+    100% { text-shadow: 0 0 20px rgba(0,240,255,0.6), 0 0 40px rgba(0,240,255,0.4); }
+}
+
+@media (max-width: 900px) {
+    .section { padding: 0 2rem; justify-content: center !important; }
+    .section-content { max-width: 100%; padding: 2rem; }
+}
+
+/* -------------------------------------------
+   ULTRA-PREMIUM INTERACTIVE SPOTLIGHT (Vercel Style)
+------------------------------------------- */
+.glass-panel::before, .tilt-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(
+        900px circle at var(--mouse-x, 0) var(--mouse-y, 0), 
+        rgba(0, 240, 255, 0.08),
+        transparent 40%
+    );
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.5s;
+    opacity: 0;
+}
+.glass-panel:hover::before, .tilt-card:hover::before {
+    opacity: 1;
+}
+
+/* -------------------------------------------
+   CINEMATIC IRIDESCENT TEXT ANIMATION
+------------------------------------------- */
+.gradient-text.animated {
+    background: linear-gradient(
+        270deg,
+        #00f0ff,
+        #a45cff,
+        #ff007f,
+        #00f0ff
+    );
+    background-size: 300% 300%;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: gradientShine 4s ease infinite;
+    text-shadow: none;
+}
+@keyframes gradientShine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* -------------------------------------------
+   GLOWING NAVIGATION BOTTOM LINE
+------------------------------------------- */
+.glass-nav {
+    border-bottom: 1px solid rgba(255,255,255,0.02) !important;
+}
+.glass-nav::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,240,255,0.6), rgba(164,92,255,0.6), transparent);
+    opacity: 0.8;
+}

@@ -1,0 +1,15 @@
+
+:root {
+    --estrutura: #3b82f6;
+    --estrutura-dark: #1e3a8a;
+    --estrutura-glow: #3b82f640;
+}
+
+.badge-neon { border-color: var(--estrutura); color: var(--estrutura); }
+.gradient-text-estrutura { background: linear-gradient(to right, #fff, var(--estrutura)); -webkit-background-clip: text; color: transparent; }
+.btn-estrutura { background: linear-gradient(135deg, var(--estrutura-dark), transparent); border-color: var(--estrutura); color: #fff; }
+.btn-estrutura:hover { background: var(--estrutura); box-shadow: 0 0 20px var(--estrutura-glow); }
+.icon-estrutura { color: var(--estrutura); border-color: var(--estrutura-glow); background: rgba(0,0,0,0.3); }
+.timeline-dot { border-color: var(--estrutura); box-shadow: 0 0 15px var(--estrutura-glow); }
+.timeline-date { color: var(--estrutura); }
+.ecg-svg { stroke: var(--estrutura); filter: drop-shadow(0 0 8px var(--estrutura)); }

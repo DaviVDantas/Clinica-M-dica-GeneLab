@@ -1,0 +1,15 @@
+
+:root {
+    --neurogenetica: #f59e0b;
+    --neurogenetica-dark: #78350f;
+    --neurogenetica-glow: #f59e0b40;
+}
+
+.badge-neon { border-color: var(--neurogenetica); color: var(--neurogenetica); }
+.gradient-text-neurogenetica { background: linear-gradient(to right, #fff, var(--neurogenetica)); -webkit-background-clip: text; color: transparent; }
+.btn-neurogenetica { background: linear-gradient(135deg, var(--neurogenetica-dark), transparent); border-color: var(--neurogenetica); color: #fff; }
+.btn-neurogenetica:hover { background: var(--neurogenetica); box-shadow: 0 0 20px var(--neurogenetica-glow); }
+.icon-neurogenetica { color: var(--neurogenetica); border-color: var(--neurogenetica-glow); background: rgba(0,0,0,0.3); }
+.timeline-dot { border-color: var(--neurogenetica); box-shadow: 0 0 15px var(--neurogenetica-glow); }
+.timeline-date { color: var(--neurogenetica); }
+.ecg-svg { stroke: var(--neurogenetica); filter: drop-shadow(0 0 8px var(--neurogenetica)); }

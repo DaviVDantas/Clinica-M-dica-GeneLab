@@ -1,0 +1,15 @@
+
+:root {
+    --farmacogenetica: #10b981;
+    --farmacogenetica-dark: #064e3b;
+    --farmacogenetica-glow: #10b98140;
+}
+
+.badge-neon { border-color: var(--farmacogenetica); color: var(--farmacogenetica); }
+.gradient-text-farmacogenetica { background: linear-gradient(to right, #fff, var(--farmacogenetica)); -webkit-background-clip: text; color: transparent; }
+.btn-farmacogenetica { background: linear-gradient(135deg, var(--farmacogenetica-dark), transparent); border-color: var(--farmacogenetica); color: #fff; }
+.btn-farmacogenetica:hover { background: var(--farmacogenetica); box-shadow: 0 0 20px var(--farmacogenetica-glow); }
+.icon-farmacogenetica { color: var(--farmacogenetica); border-color: var(--farmacogenetica-glow); background: rgba(0,0,0,0.3); }
+.timeline-dot { border-color: var(--farmacogenetica); box-shadow: 0 0 15px var(--farmacogenetica-glow); }
+.timeline-date { color: var(--farmacogenetica); }
+.ecg-svg { stroke: var(--farmacogenetica); filter: drop-shadow(0 0 8px var(--farmacogenetica)); }
