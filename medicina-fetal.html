@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicina Fetal — GeneLab</title>
+    <meta name="description" content="Diagnóstico pré-natal de precisão na GeneLab. Sequenciação embrionária avançada, biópsia de vilo corial e biópsias líquidas maternas com zero risco fetal.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+    </script>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/medicina-fetal.css">
+</head>
+
+<body>
+
+    <div id="canvas-container"></div>
+    <div id="cursor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 3v3c0 3 10 5 10 10v5" />
+            <path d="M17 3v3c0 3-10 5-10 10v5" />
+            <path d="M7 6h10" /><path d="M9 10h6" />
+            <path d="M9 14h6" /><path d="M7 18h10" />
+        </svg>
+    </div>
+    <div id="cursor-blur"></div>
+
+    <nav class="pill-nav glass-nav">
+        <a href="index.html" class="logo magnetic" style="text-decoration: none;">Gene<span>Lab</span></a>
+        <ul class="pill-nav-links">
+            <li><a href="index.html#dna-section">O DNA</a></li>
+            <li><a href="index.html#sobre">Sobre Nós</a></li>
+            <li><a href="index.html#especialidades">Especialidades</a></li>
+            <li><a href="index.html#servicos">Serviços</a></li>
+            <li><a href="index.html#equipe">Equipe</a></li>
+            <li><a href="index.html#contato" class="pill-btn magnetic">Contactar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text reveal fade-left">
+                <div class="badge-neon"><div class="pulse-dot"></div> Diagnóstico Pré-Natal</div>
+                <h1>Medicina Fetal &amp;<br><span style="color: #00f0ff;">Genética Materna</span></h1>
+                <p>O futuro rastreado no útero. Através de biópsias líquidas maternas e sequenciação embrionária avançada, entregamos paz de espírito molecular aos futuros pais — com <strong>zero risco fetal</strong>.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+                    <a href="#exames" class="btn magnetic" style="background: rgba(0,240,255,0.15); border-color: rgba(0,240,255,0.5); color: #00f0ff;">Ver Exames Disponíveis</a>
+                    <a href="#protocolo" class="btn magnetic">Como Funciona</a>
+                </div>
+            </div>
+
+            <!-- Dashboard Mockup -->
+            <div class="medical-dashboard reveal fade-right" style="transition-delay: 200ms;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #00f0ff; box-shadow: 0 0 10px #00f0ff;"></div>
+                        <span style="font-family: 'Space Grotesk'; font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted);">ANÁLISE FETAL ATIVA</span>
+                    </div>
+                    <span style="font-family: monospace; color: var(--primary); font-size: 0.85rem;">SEQ: NIPT-ADN-07</span>
+                </div>
+
+                <div style="background: rgba(0,0,0,0.4); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; border: 1px solid rgba(0,240,255,0.15);">
+                    <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 0.8rem;">RESULTADO NIPT — TRISSOMIAS</p>
+                    <div style="display: grid; grid-template-columns: repeat(3,1fr); gap: 0.8rem; text-align: center;">
+                        <div><div style="font-size: 1.4rem; font-weight: 800; color: #00f0ff;">T21</div><div style="font-size: 0.65rem; color: #10b981; text-transform: uppercase; letter-spacing: 1px;">Negativo</div></div>
+                        <div><div style="font-size: 1.4rem; font-weight: 800; color: #00f0ff;">T18</div><div style="font-size: 0.65rem; color: #10b981; text-transform: uppercase; letter-spacing: 1px;">Negativo</div></div>
+                        <div><div style="font-size: 1.4rem; font-weight: 800; color: #00f0ff;">T13</div><div style="font-size: 0.65rem; color: #10b981; text-transform: uppercase; letter-spacing: 1px;">Negativo</div></div>
+                    </div>
+                </div>
+
+                <div class="dash-stats">
+                    <div class="dash-card">
+                        <h4>ADN Fetal Livre</h4>
+                        <div class="value">12.4<span>%</span></div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Acurácia NIPT</h4>
+                        <div class="value">99.5<span>%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bento Grid Exames -->
+    <section id="exames" style="border-top: 1px solid rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Exames &amp; <span style="background: linear-gradient(135deg,#fff,#00f0ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Tecnologias</span></h2>
+                <p>Uma suite completa de diagnósticos pré-natais não invasivos e minimamente invasivos, coberta por laudo médico especializado.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-item large reveal">
+                    <div class="bento-icon" style="background: rgba(0,240,255,0.08); color: #00f0ff; border: 1px solid rgba(0,240,255,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                        <h3>NIPT — Teste Pré-Natal Não Invasivo</h3>
+                        <p>Análise do ADN fetal livre circulante no sangue materno a partir da 10ª semana. Detecta trissomias 21, 18 e 13, aneuploidias dos cromossomas sexuais e microdeleções, com sensibilidade superior a 99,5% para a Síndrome de Down.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 100ms;">
+                    <div class="bento-icon" style="background: rgba(0,240,255,0.08); color: #00f0ff; border: 1px solid rgba(0,240,255,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                    </div>
+                    <div>
+                        <h3>QF-PCR Rápido</h3>
+                        <p>Resultado em 48h para as 5 aneuploidias mais comuns, ideal para gestações de alto risco que necessitam de decisão clínica ágil.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 200ms;">
+                    <div class="bento-icon" style="background: rgba(164,92,255,0.08); color: #a45cff; border: 1px solid rgba(164,92,255,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4"/><path d="M21 3h-4"/><path d="M21 13v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M3 9h18"/></svg>
+                    </div>
+                    <div>
+                        <h3>Sequenciação do Exoma Fetal</h3>
+                        <p>Para bebés com anomalias ecográficas, sequenciamos o exoma para identificar a causa monogénica causadora.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item large reveal" style="transition-delay: 300ms;">
+                    <div class="bento-icon" style="background: rgba(0,240,255,0.08); color: #00f0ff; border: 1px solid rgba(0,240,255,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
+                    <div>
+                        <h3>Biópsia de Vilo Corial (CVS) &amp; Amniocentese</h3>
+                        <p>Procedimentos invasivos realizados com guia ecográfico de alta precisão quando indicados clinicamente. Permitem análise citogenética completa (cariótipo + array CGH), cobrindo deleções e duplicações submicroscópicas não detetáveis por métodos padrão.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protocolo Timeline -->
+    <section id="protocolo">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>O Nosso <span style="color: #00f0ff;">Protocolo</span></h2>
+                <p>Um percurso clínico desenhado para minimizar a ansiedade e maximizar a precisão diagnóstica ao longo de toda a gravidez.</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 01</span>
+                        <h3>Consulta Pré-Concepcional</h3>
+                        <p>Avaliamos o histórico familiar do casal, realizam-se testes de portador para mais de 300 doenças recessivas (Fibrosse Quística, SMA, etc.) antes ou no início da gravidez. Identificação de risco antes da conceção ou implantação.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 02 — 10ª Semana</span>
+                        <h3>Coleta &amp; Processamento NIPT</h3>
+                        <p>Simples coleta de sangue venoso materno. O ADN fetal livre é enriquecido e sequenciado. Os bioinformatas GeneLab analisam os fragmentos cromossómicos com algoritmos de aprendizagem de máquina validados clinicamente.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 03 — 7 a 10 Dias</span>
+                        <h3>Resultado &amp; Aconselhamento</h3>
+                        <p>Entrega do laudo assinado por geneticista clínico. Em caso de resultado de alto risco, a nossa equipa acompanha a decisão sobre confirmação diagnóstica por método invasivo, oferecendo suporte psicológico integrado.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 04 — Pós-Nascimento</span>
+                        <h3>Acompanhamento Neonatal</h3>
+                        <p>Monitorização genética do recém-nascido para confirmação diagnóstica, rastreio neonatal expandido (NBS) e planeamento de intervenção precoce quando necessário.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mega CTA -->
+    <section style="padding-bottom: 8rem;">
+        <div class="container">
+            <div class="cta-mega reveal fade-up">
+                <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem;">Proteja o <span style="color: #00f0ff;">início da vida</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem;">O diagnóstico pré-natal de precisão é o maior presente que pode dar ao seu filho. Agende hoje a sua consulta de aconselhamento genético pré-natal.</p>
+                <a href="index.html#contato" class="btn magnetic" style="font-size:1.1rem; padding:1.2rem 3rem; background: rgba(0,240,255,0.15); border-color: rgba(0,240,255,0.5); color: #00f0ff;">Agendar Consulta Pré-Natal</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            &copy; 2026 GeneLab Centro de Biotecnologia &mdash; <a href="index.html" class="magnetic">Voltar à Página Principal</a>
+        </div>
+    </footer>
+
+    <script type="module" src="js/medicina-fetal.js"></script>
+    <script src="js/cursor.js"></script>
+</body>
+</html>

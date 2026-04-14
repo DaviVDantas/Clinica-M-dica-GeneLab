@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estrutura Tecnológica — GeneLab</title>
+    <meta name="description" content="Infraestrutura laboratorial e tecnológica da GeneLab. Sequenciadores Illumina NovaSeq, plataforma de bioinformática proprietária e sistema de laudos digitais integrados.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+    </script>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/estrutura.css">
+</head>
+
+<body>
+
+    <div id="canvas-container"></div>
+    <div id="cursor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 3v3c0 3 10 5 10 10v5" />
+            <path d="M17 3v3c0 3-10 5-10 10v5" />
+            <path d="M7 6h10" /><path d="M9 10h6" />
+            <path d="M9 14h6" /><path d="M7 18h10" />
+        </svg>
+    </div>
+    <div id="cursor-blur"></div>
+
+    <nav class="pill-nav glass-nav">
+        <a href="index.html" class="logo magnetic" style="text-decoration: none;">Gene<span>Lab</span></a>
+        <ul class="pill-nav-links">
+            <li><a href="index.html#dna-section">O DNA</a></li>
+            <li><a href="index.html#sobre">Sobre Nós</a></li>
+            <li><a href="index.html#especialidades">Especialidades</a></li>
+            <li><a href="index.html#servicos">Serviços</a></li>
+            <li><a href="index.html#equipe">Equipe</a></li>
+            <li><a href="index.html#contato" class="pill-btn magnetic">Contactar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text reveal fade-left">
+                <div class="badge-neon"><div class="pulse-dot"></div> Infraestrutura de Elite</div>
+                <h1>Estrutura &amp;<br><span style="color: #3b82f6;">Tecnologia Lab</span></h1>
+                <p>O poder diagnóstico da GeneLab repousa sobre uma infraestrutura de nível hospitalar universitário: sequenciadores Illumina de última geração, pipeline bioinformático proprietário e ambiente de biossegurança rigoroso.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+                    <a href="#equipamentos" class="btn magnetic" style="background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.5); color: #3b82f6;">Ver Equipamentos</a>
+                    <a href="#bioinformatica" class="btn magnetic">Pipeline Bioinformático</a>
+                </div>
+            </div>
+
+            <!-- Dashboard Tech -->
+            <div class="medical-dashboard reveal fade-right" style="transition-delay: 200ms;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px #3b82f6;"></div>
+                        <span style="font-family: 'Space Grotesk'; font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted);">SISTEMA OPERACIONAL</span>
+                    </div>
+                    <span style="font-family: monospace; color: var(--primary); font-size: 0.85rem;">LAB: GNL-BSL2-DF</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 0.7rem 1rem; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15); border-radius: 8px;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Illumina NovaSeq X Plus</span>
+                        <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">● ONLINE</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.7rem 1rem; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15); border-radius: 8px;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Pipeline GnomAD v4.0</span>
+                        <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">● ATIVO</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.7rem 1rem; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15); border-radius: 8px;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Servidor HIPAA / LGPD</span>
+                        <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">● SEGURO</span>
+                    </div>
+                </div>
+
+                <div class="dash-stats">
+                    <div class="dash-card">
+                        <h4>Throughput/Dia</h4>
+                        <div class="value">2.4<span>Tb</span></div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Cobertura WGS</h4>
+                        <div class="value">30<span>×</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipamentos -->
+    <section id="equipamentos" style="border-top: 1px solid rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Equipamentos &amp; <span style="background: linear-gradient(135deg,#3b82f6,#93c5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Plataformas</span></h2>
+                <p>Investimos nas melhores plataformas de sequenciação, extração e análise do mercado para garantir a mais alta precisão diagnóstica no ecossistema médico nacional.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-item large reveal">
+                    <div class="bento-icon" style="background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
+                    <div>
+                        <h3>Illumina NovaSeq X Plus &amp; NextSeq 2000</h3>
+                        <p>Os nossos sequenciadores de referência permitem produzir até 2,4 Tb de dados por dia com cobertura uniforme. A plataforma NovaSeq X Plus suporta genomas completos (WGS) a 30× de cobertura, enquanto o NextSeq 2000 é dedicado a painéis clínicos de alta precisão com turnaround de 24h.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 100ms;">
+                    <div class="bento-icon" style="background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div>
+                        <h3>Oxford Nanopore — Long-Read</h3>
+                        <p>Sequenciação de leituras longas para resolução de regiões estruturalmente complexas, repetições em tandem e rearranjos cromossómicos não detetáveis por short-read.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 200ms;">
+                    <div class="bento-icon" style="background: rgba(0,240,255,0.08); color: #00f0ff; border: 1px solid rgba(0,240,255,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+                    </div>
+                    <div>
+                        <h3>Cromossoma Arrays (SNP Array &amp; CGH)</h3>
+                        <p>Detecção de variações de número de cópia (CNVs) em resolução de 50kb — essencial para diagnóstico de síndromes de microdeleção/microduplicação e atraso global do desenvolvimento.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item large reveal" style="transition-delay: 300ms;">
+                    <div class="bento-icon" style="background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/></svg>
+                    </div>
+                    <div>
+                        <h3>Infraestrutura Digital &amp; LGPD</h3>
+                        <p>Todos os dados genómicos são armazenados em servidores privados certificados com criptografia AES-256, conforme as exigências da LGPD e padrões HIPAA internacionais. Os resultados são acessíveis por portal seguro com autenticação em dois fatores. Nunca vendemos ou partilhamos dados genéticos com terceiros.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Bioinformático -->
+    <section id="bioinformatica">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Pipeline <span style="color: #3b82f6;">Bioinformático</span></h2>
+                <p>O fluxo de análise computacional que transforma milhões de leituras de ADN num diagnóstico clínico preciso e accionável.</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">FASE 01</span>
+                        <h3>Controlo de Qualidade (FastQC &amp; Trimmomatic)</h3>
+                        <p>Validação automática de qualidade das leituras brutas, remoção de adaptadores e sequências de baixa qualidade. Taxa de leituras com Q30 &gt;95% exigida para aprovação do lote.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">FASE 02</span>
+                        <h3>Alinhamento ao Genoma de Referência (GRCh38)</h3>
+                        <p>Utilização do algoritmo BWA-MEM2 para alinhamento de alta velocidade ao genoma humano de referência GRCh38. Processamento paralelo em GPU reduz o tempo de alinhamento de horas para minutos.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">FASE 03</span>
+                        <h3>Chamada de Variantes (GATK4 &amp; DeepVariant)</h3>
+                        <p>Pipeline GATK4 HaplotypeCaller para SNVs e INDELs, com complemento de modelo de deep learning (DeepVariant) para regiões de alta complexidade estrutural. Taxa de falsos negativos &lt;1%.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">FASE 04</span>
+                        <h3>Anotação, Priorização &amp; Laudo Médico</h3>
+                        <p>Anotação automática via ANNOVAR, ClinVar, gnomAD e OMIM. Priorização por patogenicidade ACMG/AMP. Revisão manual por geneticista clínico sénior para emissão de laudo digital assinado eletronicamente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Acreditações -->
+    <section style="padding-bottom: 8rem;">
+        <div class="container">
+            <div class="cta-mega reveal fade-up">
+                <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem;">Tecnologia ao serviço<br> da <span style="color: #3b82f6;">vida humana</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem;">A GeneLab é o único laboratório genómico de Brasília com acreditação CAP/CLIA, certificação ISO 15189 e auditorias regulares pela ANVISA. Ciência sem compromissos.</p>
+                <a href="index.html#contato" class="btn magnetic" style="font-size:1.1rem; padding:1.2rem 3rem; background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.5); color: #3b82f6;">Conheça o Nosso Laboratório</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            &copy; 2026 GeneLab Centro de Biotecnologia &mdash; <a href="index.html" class="magnetic">Voltar à Página Principal</a>
+        </div>
+    </footer>
+
+    <script type="module" src="js/estrutura.js"></script>
+    <script src="js/cursor.js"></script>
+</body>
+</html>

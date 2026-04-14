@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmacogenética — GeneLab</title>
+    <meta name="description" content="Farmacogenética na GeneLab. A dose certa do medicamento certo na primeira tentativa. Decodificamos como o seu genoma metaboliza fármacos para maximizar eficácia e eliminar efeitos adversos.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+    </script>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/farmacogenetica.css">
+</head>
+
+<body>
+
+    <div id="canvas-container"></div>
+    <div id="cursor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 3v3c0 3 10 5 10 10v5" />
+            <path d="M17 3v3c0 3-10 5-10 10v5" />
+            <path d="M7 6h10" /><path d="M9 10h6" />
+            <path d="M9 14h6" /><path d="M7 18h10" />
+        </svg>
+    </div>
+    <div id="cursor-blur"></div>
+
+    <nav class="pill-nav glass-nav">
+        <a href="index.html" class="logo magnetic" style="text-decoration: none;">Gene<span>Lab</span></a>
+        <ul class="pill-nav-links">
+            <li><a href="index.html#dna-section">O DNA</a></li>
+            <li><a href="index.html#sobre">Sobre Nós</a></li>
+            <li><a href="index.html#especialidades">Especialidades</a></li>
+            <li><a href="index.html#servicos">Serviços</a></li>
+            <li><a href="index.html#equipe">Equipe</a></li>
+            <li><a href="index.html#contato" class="pill-btn magnetic">Contactar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text reveal fade-left">
+                <div class="badge-neon"><div class="pulse-dot"></div> Medicina de Precisão</div>
+                <h1>Farmacogenética &amp;<br><span style="color: #10b981;">Metabolismo Genómico</span></h1>
+                <p>A dose exata do remédio certo, na primeira tentativa. Decodificamos como o seu fígado processa medicamentos para eliminar efeitos adversos severos e maximizar a eficácia terapêutica em oncologia, psiquiatria e cardiologia.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+                    <a href="#genes" class="btn magnetic" style="background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.5); color: #10b981;">Genes Analisados</a>
+                    <a href="#protocolo" class="btn magnetic">Como Funciona</a>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="medical-dashboard reveal fade-right" style="transition-delay: 200ms;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981;"></div>
+                        <span style="font-family: 'Space Grotesk'; font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted);">PERFIL METABÓLICO ATIVO</span>
+                    </div>
+                    <span style="font-family: monospace; color: var(--primary); font-size: 0.85rem;">SEQ: PGX-CYP-09</span>
+                </div>
+
+                <div style="background: rgba(0,0,0,0.4); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.2rem; border: 1px solid rgba(16,185,129,0.15);">
+                    <p style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 0.8rem;">FENÓTIPO METABÓLICO — CYP450</p>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">CYP2D6</span>
+                            <span style="font-size: 0.75rem; font-weight: 700; background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 10px; border-radius: 100px;">Metabolizador Normal</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">CYP2C19</span>
+                            <span style="font-size: 0.75rem; font-weight: 700; background: rgba(245,158,11,0.15); color: #f59e0b; padding: 2px 10px; border-radius: 100px;">Metabolizador Lento</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">CYP3A4/5</span>
+                            <span style="font-size: 0.75rem; font-weight: 700; background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 10px; border-radius: 100px;">Metabolizador Normal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-stats">
+                    <div class="dash-card">
+                        <h4>Fármacos Cobertos</h4>
+                        <div class="value">250<span>+</span></div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Genes Analisados</h4>
+                        <div class="value">40<span>+</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genes -->
+    <section id="genes" style="border-top: 1px solid rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Genes &amp; <span style="background: linear-gradient(135deg,#10b981,#6ee7b7); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Aplicações Clínicas</span></h2>
+                <p>Analisamos os genes enzimáticos e transportadores de fármacos mais clinicamente relevantes, com impacto direto na prescrição de mais de 250 medicamentos.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-item large reveal">
+                    <div class="bento-icon" style="background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <div>
+                        <h3>Sistema CYP450 — Metabolismo Hepático</h3>
+                        <p>Os genes CYP2D6, CYP2C19, CYP2C9, CYP3A4/5 e CYP1A2 controlam o metabolismo de antidepressivos, antipsicóticos, opiáceos, anticoagulantes e quimioterápicos. Um "metabolizador ultrarrápido" pode precisar de 4× a dose padrão, enquanto um "metabolizador lento" acumula níveis tóxicos.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 100ms;">
+                    <div class="bento-icon" style="background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    <div>
+                        <h3>Farmacologia Cardiovascular</h3>
+                        <p>CYP2C9 e VKORC1 para warfarina (anticoagulação), CYP2C19 para clopidogrel (prevenção de AVC), SLCO1B1 para estatinas (toxicidade muscular). Essencial antes de qualquer prescrição de antitrombótico de longo prazo.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 200ms;">
+                    <div class="bento-icon" style="background: rgba(0,240,255,0.08); color: #00f0ff; border: 1px solid rgba(0,240,255,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <div>
+                        <h3>Psicofarmacologia de Precisão</h3>
+                        <p>CYP2D6 e CYP2C19 são críticos para antidepressivos (SSRIs, tricíclicos), antipsicóticos e benzodiazepinas. Elimina o "tentativa-e-erro" na psiquiatria, reduzindo o tempo até à estabilização clínica em 40%.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item large reveal" style="transition-delay: 300ms;">
+                    <div class="bento-icon" style="background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </div>
+                    <div>
+                        <h3>Oncofarmacogenómica — Quimioterapia Personalizada</h3>
+                        <p>DPYD para 5-fluorouracilo (toxicidade fatal evitável), UGT1A1 para irinotecano, TPMT/NUDT15 para tiopurinas em leucemia infantil. O teste pré-quimioterapia identifica os pacientes com risco elevado de toxicidade hematológica grave, podendo salvar vidas com uma simples análise de sangue.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protocolo -->
+    <section id="protocolo">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>O Nosso <span style="color: #10b981;">Processo</span></h2>
+                <p>Da coleta ao relatório farmacogenómico integrado, com recomendações de dosagem específicas para cada medicamento relevante ao seu plano terapêutico.</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 01</span>
+                        <h3>Avaliação Clínica e Medicamentosa</h3>
+                        <p>Revisão da lista actual de medicamentos com o seu médico prescritor. Identificamos quais os fármacos com maior impacto farmacogenómico e definimos os genes prioritários a analisar.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 02</span>
+                        <h3>Coleta &amp; Genotipagem</h3>
+                        <p>Simples zaragatoa oral ou amostra de sangue. Utilizamos arrays de genotipagem de alta densidade e sequenciação dirigida para os 40+ genes farmacogenómicos principais, com cobertura de variantes raras funcionais.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 03 — 7 Dias</span>
+                        <h3>Relatório Farmacogenómico Integrado</h3>
+                        <p>Laudo com fenótipo metabólico detalhado por gene, impacto em cada medicamento do seu arsenal terapêutico e recomendações de ajuste de dose baseadas em guidelines CPIC (Clinical Pharmacogenomics Implementation Consortium).</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 04</span>
+                        <h3>Implementação e Monitorização</h3>
+                        <p>Consulta de devolução com o seu médico para implementar os ajustes de dose ou substituição de fármacos. O relatório GeneLab é válido para toda a vida — o seu genoma não muda, mas o seu plano terapêutico puede evoluir com ele.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="padding-bottom: 8rem;">
+        <div class="container">
+            <div class="cta-mega reveal fade-up">
+                <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem;">O remédio certo,<br><span style="color: #10b981;">para o seu genoma</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem;">Mais de 7% da população é metabolizador lento de CYP2C19. Se toma clopidogrel ou antidepressivos, precisa saber o seu perfil genético. Realize o exame hoje.</p>
+                <a href="index.html#contato" class="btn magnetic" style="font-size:1.1rem; padding:1.2rem 3rem; background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.5); color: #10b981;">Solicitar Painel Farmacogenómico</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            &copy; 2026 GeneLab Centro de Biotecnologia &mdash; <a href="index.html" class="magnetic">Voltar à Página Principal</a>
+        </div>
+    </footer>
+
+    <script type="module" src="js/farmacogenetica.js"></script>
+    <script src="js/cursor.js"></script>
+</body>
+</html>

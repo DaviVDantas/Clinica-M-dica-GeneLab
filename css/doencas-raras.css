@@ -1,0 +1,68 @@
+/* ==========================================================================
+   DOENCAS-RARAS.CSS — Estilos exclusivos da página de Doenças Raras
+   ========================================================================== */
+
+/* --- Cor de Acento (herda o specialty purple pois o layout é idêntico) --- */
+:root {
+    --specialty: #a45cff;
+    --specialty-glow: rgba(164, 92, 255, 0.4);
+    --specialty-soft: rgba(164, 92, 255, 0.1);
+}
+
+/* --- Gradiente de Texto --- */
+.gradient-text-specialty {
+    background: linear-gradient(135deg, #c084fc, #a45cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-cyan {
+    background: linear-gradient(135deg, #fff, #00f0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* --- Botão Specialty --- */
+.btn-specialty {
+    background: rgba(164, 92, 255, 0.15) !important;
+    border-color: rgba(164, 92, 255, 0.5) !important;
+    color: #c084fc !important;
+}
+
+.btn-specialty:hover {
+    background: rgba(164, 92, 255, 0.3) !important;
+    border-color: var(--specialty) !important;
+    box-shadow: 0 10px 30px var(--specialty-glow) !important;
+}
+
+/* --- Cursor Specialty --- */
+.hovering-specialty #cursor {
+    background: rgba(164, 92, 255, 0.2) !important;
+    border: 1px solid var(--specialty) !important;
+    box-shadow: 0 0 20px var(--specialty-glow) !important;
+}
+
+.badge-neon { color: var(--specialty); }
+.pulse-dot { color: var(--specialty); }
+
+.icon-specialty {
+    background: var(--specialty-soft);
+    color: var(--specialty);
+    border: 1px solid rgba(164, 92, 255, 0.3);
+}
+
+/* --- Light Theme --- */
+:root[data-theme="light"] body {
+    background-color: #f8fafc;
+}
+
+:root[data-theme="light"] .bento-item {
+    border-color: rgba(164, 92, 255, 0.15);
+}
+
+:root[data-theme="light"] .timeline-content {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(164, 92, 255, 0.2);
+}

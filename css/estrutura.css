@@ -1,0 +1,12 @@
+/* ==========================================================================
+   ESTRUTURA.CSS — Estilos exclusivos da página de Estrutura Tecnológica
+   ========================================================================== */
+:root {
+    --page-accent: #3b82f6;
+    --page-glow: rgba(59, 130, 246, 0.3);
+}
+
+.badge-neon { color: var(--page-accent); }
+.pulse-dot { color: var(--page-accent); }
+
+h1 span { color: var(--page-accent); }

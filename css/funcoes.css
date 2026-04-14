@@ -1,0 +1,15 @@
+
+:root {
+    --funcoes: #a855f7;
+    --funcoes-dark: #581c87;
+    --funcoes-glow: #a855f740;
+}
+
+.badge-neon { border-color: var(--funcoes); color: var(--funcoes); }
+.gradient-text-funcoes { background: linear-gradient(to right, #fff, var(--funcoes)); -webkit-background-clip: text; color: transparent; }
+.btn-funcoes { background: linear-gradient(135deg, var(--funcoes-dark), transparent); border-color: var(--funcoes); color: #fff; }
+.btn-funcoes:hover { background: var(--funcoes); box-shadow: 0 0 20px var(--funcoes-glow); }
+.icon-funcoes { color: var(--funcoes); border-color: var(--funcoes-glow); background: rgba(0,0,0,0.3); }
+.timeline-dot { border-color: var(--funcoes); box-shadow: 0 0 15px var(--funcoes-glow); }
+.timeline-date { color: var(--funcoes); }
+.ecg-svg { stroke: var(--funcoes); filter: drop-shadow(0 0 8px var(--funcoes)); }

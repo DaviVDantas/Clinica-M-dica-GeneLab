@@ -1,0 +1,10 @@
+/* ==========================================================================
+   MEDICINA-FETAL.CSS — Estilos mínimos exclusivos da página Medicina Fetal
+   ========================================================================== */
+:root {
+    --page-accent: #00f0ff;
+    --page-glow: rgba(0, 240, 255, 0.3);
+}
+
+.badge-neon { color: var(--page-accent); }
+.pulse-dot { color: var(--page-accent); }

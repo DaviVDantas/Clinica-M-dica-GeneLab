@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doenças Raras — GeneLab</title>
+    <meta name="description" content="Diagnóstico de Doenças Raras na GeneLab. Sequenciação de exoma e genoma completo para resolver odisseias diagnósticas. Identificação de mutações em mais de 7.000 doenças raras catalogadas.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/doencas-raras.css">
+</head>
+
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div id="cursor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 3v3c0 3 10 5 10 10v5" />
+            <path d="M17 3v3c0 3-10 5-10 10v5" />
+            <path d="M7 6h10" /><path d="M9 10h6" />
+            <path d="M9 14h6" /><path d="M7 18h10" />
+        </svg>
+    </div>
+    <div id="cursor-blur"></div>
+
+    <nav class="pill-nav glass-nav">
+        <a href="index.html" class="logo magnetic" style="text-decoration: none;">Gene<span>Lab</span></a>
+        <ul class="pill-nav-links">
+            <li><a href="index.html#dna-section">O DNA</a></li>
+            <li><a href="index.html#sobre">Sobre Nós</a></li>
+            <li><a href="index.html#especialidades">Especialidades</a></li>
+            <li><a href="index.html#servicos">Serviços</a></li>
+            <li><a href="index.html#equipe">Equipe</a></li>
+            <li><a href="index.html#contato" class="pill-btn magnetic">Contactar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text reveal fade-left">
+                <div class="badge-neon">
+                    <div class="pulse-dot"></div> Diagnóstico de Precisão
+                </div>
+                <h1>Doenças Raras &amp;<br><span class="gradient-text-specialty">Exoma Profundo</span></h1>
+                <p>Existem mais de <strong>7.000 doenças raras</strong> catalogadas — 80% de origem genética. A maioria dos doentes passa uma média de <strong>5 a 7 anos</strong> sem diagnóstico. Na GeneLab, mudamos isso.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+                    <a href="#abordagem" class="btn btn-specialty magnetic specialty-hover">Nossa Abordagem</a>
+                    <a href="#protocolo" class="btn magnetic">Ver Protocolo</a>
+                </div>
+            </div>
+
+            <!-- Dashboard Mockup -->
+            <div class="medical-dashboard reveal fade-right" style="transition-delay: 200ms;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--secondary); box-shadow: 0 0 10px var(--secondary);"></div>
+                        <span style="font-family: 'Space Grotesk'; font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted);">ANÁLISE EXOMA WES</span>
+                    </div>
+                    <span style="font-family: monospace; color: var(--primary); font-size: 0.85rem;">SEQ: WES-RD-2026</span>
+                </div>
+
+                <!-- Diagnóstico progress -->
+                <div style="margin-bottom: 1.2rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Taxa Diagnóstica (WES)</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary);">40–50%</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden;">
+                        <div style="height: 100%; width: 45%; background: linear-gradient(90deg, var(--secondary), var(--primary)); border-radius: 6px; box-shadow: 0 0 10px rgba(164,92,255,0.4);"></div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 1.4rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Taxa Diagnóstica (WGS)</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">55–65%</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden;">
+                        <div style="height: 100%; width: 60%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 6px; box-shadow: 0 0 10px rgba(0,240,255,0.4);"></div>
+                    </div>
+                </div>
+
+                <div class="dash-stats">
+                    <div class="dash-card">
+                        <h4>Doenças Raras</h4>
+                        <div class="value">7<span>k+</span></div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Genes no WES</h4>
+                        <div class="value">20<span>k+</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Abordagem Diagnóstica -->
+    <section id="abordagem" style="background: rgba(128,0,200,0.01); border-top: 1px solid rgba(164,92,255,0.05);">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Resolvendo <span class="gradient-text-specialty">Odisseias Diagnósticas</span></h2>
+                <p>A nossa metodologia diagnóstica foi desenhada especificamente para os casos mais complexos — aqueles que passaram por múltiplos especialistas sem resposta. Usamos tecnologia para onde os olhos clínicos não chegam.</p>
+            </div>
+
+            <div class="bento-grid">
+                <!-- Card 1 — WES -->
+                <div class="bento-item large reveal">
+                    <div class="bento-icon icon-specialty">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M7 3v3c0 3 10 5 10 10v5"/><path d="M17 3v3c0 3-10 5-10 10v5"/>
+                            <path d="M7 6h10"/><path d="M9 10h6"/><path d="M9 14h6"/><path d="M7 18h10"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>Sequenciação de Exoma (WES) &amp; Genoma Completo (WGS)</h3>
+                        <p>O WES sequencia todos os ~20.000 genes codificadores de proteínas, responsáveis por ~85% das variantes patogénicas conhecidas. O WGS cobre ainda regiões regulatórias e intrônicas, aumentando a taxa diagnóstica para 55–65%. Para casos pediátricos graves, realizamos <strong>análise de trio</strong> (criança + pais) para identificar variantes <em>de novo</em> — que surgem pela primeira vez na família.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 — Painel de Doenças Raras -->
+                <div class="bento-item reveal" style="transition-delay: 100ms;">
+                    <div class="bento-icon icon-cyan">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="9" y1="3" x2="9" y2="21"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>Painéis Genéticos Dirigidos</h3>
+                        <p>Quando existe suspeita clínica bem definida por sistema (esquelético, metabólico, imunológico), utilizamos painéis de 100–500 genes para maior profundidade de cobertura e resultado mais rápido — em 7 dias úteis.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 — Reanálise -->
+                <div class="bento-item reveal" style="transition-delay: 200ms;">
+                    <div class="bento-icon icon-specialty">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>Reanálise de Dados Anteriores</h3>
+                        <p>Pacientes com WES/WGS anterior negativo beneficiam de reanálise periódica: à medida que novos genes são descritos na literatura, as variantes previamente classificadas como VUS podem tornar-se diagnósticas.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4 — Doenças Metabólicas -->
+                <div class="bento-item large reveal" style="transition-delay: 300ms;">
+                    <div class="bento-icon icon-cyan">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                            <polyline points="2 17 12 22 22 17"/>
+                            <polyline points="2 12 12 17 22 12"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>Doenças Metabólicas, Esqueléticas &amp; Multissistémicas</h3>
+                        <p>Cobrimos um amplo espetro: erros inatos do metabolismo (Gaucher, Fenilcetonúria, Glicogenoses), displasias esqueléticas (Acondroplasia, Osteogénese Imperfeita), imunodeficiências primárias e síndromes dismórficas complexas. O diagnóstico molecular guia o acesso a <strong>terapias de substituição enzimática</strong>, terapia génica e ensaios clínicos específicos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protocol Timeline -->
+    <section id="protocolo">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Protocolo <span class="gradient-text-specialty">Clínico</span></h2>
+                <p>Do heredograma ao diagnóstico molecular, o nosso fluxo foi concebido para resolver em semanas o que muitas famílias esperam durante anos.</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 01</span>
+                        <h3>Heredograma &amp; Fenótipo HPO</h3>
+                        <p>O nosso especialista em doenças raras constrói um mapa detalhado da história familiar e codifica o fenótipo clínico do doente usando termos HPO (Human Phenotype Ontology). Esta codificação é utilizada por algoritmos de IA para priorizar as variantes genéticas mais relevantes encontradas na sequenciação.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 02</span>
+                        <h3>Sequenciação Profunda (WES ou WGS)</h3>
+                        <p>Escolha da plataforma ideal conforme a suspeita clínica. O WES tem cobertura média de 100× nos genes codificadores. O WGS oferece cobertura uniforme de 30× no genoma inteiro, incluindo regiões regulatórias e variantes estruturais complexas. Tempo de processamento laboratorial: 10–15 dias úteis.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 03</span>
+                        <h3>Análise Bioinformática &amp; Curadoria Manual</h3>
+                        <p>Pipeline automatizado de filtragem (frequência, patogenicidade, modelo de herança esperado). Curadoria manual por geneticista clínico sénior com revisão em bases de dados OMIM, ClinVar, Decipher e literaturas recentes. Classificação ACMG de cada variante candidata.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 04</span>
+                        <h3>Diagnóstico, Aconselhamento &amp; Plano de Ação</h3>
+                        <p>Consulta de devolução empática. Explicação do diagnóstico à família, implicações para outros membros, possibilidade de diagnóstico pré-natal futuro. Referenciação para centros de referência, registo em estudos de história natural e acesso a ensaios clínicos com terapias emerging.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mega CTA -->
+    <section style="padding-bottom: 8rem;">
+        <div class="container">
+            <div class="cta-mega reveal fade-up">
+                <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem;">O diagnóstico que <span class="gradient-text-specialty">muda tudo</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 620px; margin: 0 auto 3rem;">Uma família com anos de peregrinação médica merece respostas. O diagnóstico molecular não é o fim da jornada — é o começo do caminho certo. Fale connosco hoje.</p>
+                <a href="index.html#contato" class="btn btn-specialty magnetic specialty-hover" style="font-size: 1.1rem; padding: 1.2rem 3rem;">Iniciar Investigação Diagnóstica</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            &copy; 2026 GeneLab Centro de Biotecnologia &mdash; <a href="index.html" class="magnetic">Voltar à Página Principal</a>
+        </div>
+    </footer>
+
+    <script type="module" src="js/doencas-raras.js"></script>
+    <script src="js/cursor.js"></script>
+</body>
+</html>

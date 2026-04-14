@@ -1,0 +1,12 @@
+/* ==========================================================================
+   FARMACOGENETICA.CSS — Estilos exclusivos da página de Farmacogenética
+   ========================================================================== */
+:root {
+    --page-accent: #10b981;
+    --page-glow: rgba(16, 185, 129, 0.3);
+}
+
+.badge-neon { color: var(--page-accent); }
+.pulse-dot { color: var(--page-accent); }
+
+h1 span { color: var(--page-accent); }

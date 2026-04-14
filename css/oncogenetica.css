@@ -1,0 +1,161 @@
+/* ==========================================================================
+   ONCOGENETICA.CSS — Estilos exclusivos da página de Oncogenética
+   ========================================================================== */
+
+/* --- Cor de Acento --- */
+:root {
+    --specialty: #a45cff;
+    --specialty-glow: rgba(164, 92, 255, 0.4);
+    --specialty-soft: rgba(164, 92, 255, 0.1);
+    --specialty-dark: #2a004d;
+}
+
+/* --- Gradiente de Texto --- */
+.gradient-text-specialty {
+    background: linear-gradient(135deg, #c084fc, #a45cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* --- Botão Specialty --- */
+.btn-specialty {
+    background: rgba(164, 92, 255, 0.15) !important;
+    border-color: rgba(164, 92, 255, 0.5) !important;
+    color: #c084fc !important;
+}
+
+.btn-specialty:hover {
+    background: rgba(164, 92, 255, 0.3) !important;
+    border-color: var(--specialty) !important;
+    box-shadow: 0 10px 30px var(--specialty-glow) !important;
+}
+
+/* --- Cursor Specialty --- */
+.hovering-specialty #cursor {
+    background: rgba(164, 92, 255, 0.2) !important;
+    border: 1px solid var(--specialty) !important;
+    box-shadow: 0 0 20px var(--specialty-glow) !important;
+}
+
+/* --- Badge Neon Specialty --- */
+.badge-neon {
+    color: var(--specialty);
+}
+
+.pulse-dot {
+    color: var(--specialty);
+}
+
+/* --- Icons Specialty --- */
+.icon-specialty {
+    background: var(--specialty-soft);
+    color: var(--specialty);
+    border: 1px solid rgba(164, 92, 255, 0.3);
+}
+
+/* --- DNA Monitor (Dashboard) --- */
+.dna-monitor {
+    background: linear-gradient(135deg, rgba(42, 0, 77, 0.5), rgba(164, 92, 255, 0.1));
+    border-radius: 12px;
+    height: 130px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(164, 92, 255, 0.2);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.dna-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(164, 92, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(164, 92, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.dna-monitor h3 {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--specialty));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dna-monitor p {
+    position: relative;
+    z-index: 1;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Target Reticle Animation --- */
+.target-reticle {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--specialty);
+    border-radius: 50%;
+    animation: targetSpin 4s linear infinite;
+    opacity: 0.5;
+}
+
+.target-reticle::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(164, 92, 255, 0.5);
+    border-radius: 50%;
+    animation: targetSpinReverse 2s linear infinite;
+}
+
+@keyframes targetSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes targetSpinReverse {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
+/* --- Timeline Dot Specialty --- */
+.timeline-dot {
+    border-color: var(--specialty) !important;
+    box-shadow: 0 0 10px var(--specialty-glow) !important;
+}
+
+/* --- CTA Specialty --- */
+.cta-mega {
+    background: radial-gradient(circle at center, rgba(164, 92, 255, 0.08) 0%, transparent 70%), var(--glass-bg) !important;
+    border-color: rgba(164, 92, 255, 0.2) !important;
+}
+
+/* --- Light Theme Overrides --- */
+:root[data-theme="light"] body {
+    background-color: #f8fafc;
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(164, 92, 255, 0.06), transparent 30%),
+        radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.04), transparent 30%);
+}
+
+:root[data-theme="light"] .bento-item {
+    border-color: rgba(164, 92, 255, 0.15);
+}
+
+:root[data-theme="light"] .timeline-content {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(164, 92, 255, 0.2);
+}

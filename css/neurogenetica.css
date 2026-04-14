@@ -1,0 +1,12 @@
+/* ==========================================================================
+   NEUROGENETICA.CSS — Estilos exclusivos da página de Neurogenética
+   ========================================================================== */
+:root {
+    --page-accent: #f59e0b;
+    --page-glow: rgba(245, 158, 11, 0.3);
+}
+
+.badge-neon { color: var(--page-accent); }
+.pulse-dot { color: var(--page-accent); }
+
+h1 span { color: var(--page-accent); }

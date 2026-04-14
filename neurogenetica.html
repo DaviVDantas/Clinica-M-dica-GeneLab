@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neurogenética — GeneLab</title>
+    <meta name="description" content="Neurogenética na GeneLab. Diagnóstico molecular de epilepsias, autismo, neurodegeneração e doenças raras do sistema nervoso através de sequenciação de nova geração.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+    </script>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/neurogenetica.css">
+</head>
+
+<body>
+
+    <div id="canvas-container"></div>
+    <div id="cursor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 3v3c0 3 10 5 10 10v5" />
+            <path d="M17 3v3c0 3-10 5-10 10v5" />
+            <path d="M7 6h10" /><path d="M9 10h6" />
+            <path d="M9 14h6" /><path d="M7 18h10" />
+        </svg>
+    </div>
+    <div id="cursor-blur"></div>
+
+    <nav class="pill-nav glass-nav">
+        <a href="index.html" class="logo magnetic" style="text-decoration: none;">Gene<span>Lab</span></a>
+        <ul class="pill-nav-links">
+            <li><a href="index.html#dna-section">O DNA</a></li>
+            <li><a href="index.html#sobre">Sobre Nós</a></li>
+            <li><a href="index.html#especialidades">Especialidades</a></li>
+            <li><a href="index.html#servicos">Serviços</a></li>
+            <li><a href="index.html#equipe">Equipe</a></li>
+            <li><a href="index.html#contato" class="pill-btn magnetic">Contactar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text reveal fade-left">
+                <div class="badge-neon"><div class="pulse-dot"></div> Neurociência Genómica</div>
+                <h1>Neurogenética &amp;<br><span style="color: #f59e0b;">Diagnóstico Neural</span></h1>
+                <p>Claridade no labirinto neurológico. Rastreamos variantes raras causadoras de epilepsias graves, espetro do autismo e degeneração cognitiva progressiva, iluminando caminhos terapêuticos antes obscuros.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+                    <a href="#areas" class="btn magnetic" style="background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.5); color: #f59e0b;">Áreas de Atuação</a>
+                    <a href="#protocolo" class="btn magnetic">Ver Protocolo</a>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="medical-dashboard reveal fade-right" style="transition-delay: 200ms;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 10px #f59e0b;"></div>
+                        <span style="font-family: 'Space Grotesk'; font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted);">PAINEL NEUROGENÉTICO</span>
+                    </div>
+                    <span style="font-family: monospace; color: var(--primary); font-size: 0.85rem;">SEQ: NEU-WES-04</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.2rem;">
+                    <div style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 12px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #f59e0b;">850<span style="font-size: 0.9rem;">+</span></div>
+                        <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Genes do SNC</div>
+                    </div>
+                    <div style="background: rgba(0,240,255,0.06); border: 1px solid rgba(0,240,255,0.15); border-radius: 12px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 1.6rem; font-weight: 800; color: var(--primary);">72h</div>
+                        <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Resultado Urgente</div>
+                    </div>
+                </div>
+
+                <div class="dash-stats">
+                    <div class="dash-card">
+                        <h4>Genes Epilepsia</h4>
+                        <div class="value">300<span>+</span></div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Acurácia WES</h4>
+                        <div class="value">99.2<span>%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Áreas -->
+    <section id="areas" style="border-top: 1px solid rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Áreas de <span style="background: linear-gradient(135deg,#f59e0b,#fde68a); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Especialização</span></h2>
+                <p>Da genética das epilepsias à degeneração neuronal tardia, cobrimos todo o espetro das doenças neurológicas de origem genética com painéis altamente especializados.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-item large reveal">
+                    <div class="bento-icon" style="background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <div>
+                        <h3>Epilepsias Genéticas</h3>
+                        <p>Painel de mais de 300 genes ligados a epilepsias monogénicas: Síndrome de Dravet (SCN1A), Encefalopatia de Ohtahara, KCNQ2, CDKL5 e muito mais. O diagnóstico genético preciso altera diretamente a escolha do antiepilético, evitando fármacos que agravam a condição.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 100ms;">
+                    <div class="bento-icon" style="background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    </div>
+                    <div>
+                        <h3>Espetro do Autismo (TEA)</h3>
+                        <p>Sequenciação de trio (pais + criança) para identificar variantes de novo causadoras. Cobrimos genes como SHANK3, PTEN, CHD8 e regiões de número de cópia (CNVs) associadas.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item reveal" style="transition-delay: 200ms;">
+                    <div class="bento-icon" style="background: rgba(164,92,255,0.08); color: #a45cff; border: 1px solid rgba(164,92,255,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div>
+                        <h3>Neurodegeneração Hereditária</h3>
+                        <p>Alzheimer familiar (APP, PSEN1/2), Parkinson (LRRK2, GBA), ALS (SOD1, C9orf72) e ataxias cerebelares. Diagnóstico preditivo em portadores assintomáticos para início precoce de neuroproteção.</p>
+                    </div>
+                </div>
+
+                <div class="bento-item large reveal" style="transition-delay: 300ms;">
+                    <div class="bento-icon" style="background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                    </div>
+                    <div>
+                        <h3>Miopatias e Doenças Neuromusculares</h3>
+                        <p>Painel alargado para Distrofia Muscular de Duchenne/Becker (DMD), Atrofia Muscular Espinal (SMN1/SMN2), Miastenia Grave congénita e Canalopatias musculares. Diagnóstico molecular que guia a elegibilidade do paciente para terapias génicas aprovadas como Spinraza e Zolgensma.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protocolo -->
+    <section id="protocolo">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>O Nosso <span style="color: #f59e0b;">Protocolo</span></h2>
+                <p>Uma abordagem sistemática para transformar a complexidade neurológica em diagnósticos accionáveis e planos terapêuticos personalizados.</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 01</span>
+                        <h3>Consulta de Neurogenética</h3>
+                        <p>O nosso neurologista-geneticista avalia a história clínica detalhada, revisão de EEG/MRI e heredograma familiar. Define o painel mais eficiente: epilepsia, neurodesenvolvimento, degeneração ou neuromuscular.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 02</span>
+                        <h3>Sequenciação de Exoma ou Painel</h3>
+                        <p>Dependendo da suspeita clínica, realizamos Painel Dirigido (200-850 genes), WES (exoma completo ~20.000 genes) ou WGS (genoma completo). Para casos pediátricos graves, priorizamos WES trio para identificar variantes de novo.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 03</span>
+                        <h3>Análise Bioinformática &amp; Interpretação</h3>
+                        <p>Filtragem por frequência alélica, modelagem de patogenicidade (ACMG), revisão manual por especialista. Classificação final das variantes em Patogénica, Provavelmente Patogénica, VUS, Benigna.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PASSO 04</span>
+                        <h3>Plano Terapêutico de Precisão</h3>
+                        <p>Entrega de laudo e consulta de devolução. Identificação de elegibilidade para ensaios clínicos, terapias génicas aprovadas, ajuste de antiepilépticos ou encaminhamento para neuroproteção preventiva.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="padding-bottom: 8rem;">
+        <div class="container">
+            <div class="cta-mega reveal fade-up">
+                <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem;">O diagnóstico que <span style="color: #f59e0b;">muda o tratamento</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem;">Mais de 50% dos casos de epilepsia de difícil controlo têm uma causa genética tratável. Não espere — o diagnóstico molecular pode transformar o prognóstico da sua família.</p>
+                <a href="index.html#contato" class="btn magnetic" style="font-size:1.1rem; padding:1.2rem 3rem; background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.5); color: #f59e0b;">Solicitar Avaliação Neurogenética</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            &copy; 2026 GeneLab Centro de Biotecnologia &mdash; <a href="index.html" class="magnetic">Voltar à Página Principal</a>
+        </div>
+    </footer>
+
+    <script type="module" src="js/neurogenetica.js"></script>
+    <script src="js/cursor.js"></script>
+</body>
+</html>

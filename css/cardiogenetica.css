@@ -1,0 +1,107 @@
+/* ==========================================================================
+   CARDIOGENETICA.CSS — Estilos exclusivos da página de Cardiogenética
+   ========================================================================== */
+
+/* --- Cor de Acento --- */
+:root {
+    --cardio: #ff2244;
+    --cardio-glow: rgba(255, 34, 68, 0.4);
+    --cardio-soft: rgba(255, 34, 68, 0.1);
+}
+
+/* --- Gradiente de Texto --- */
+.gradient-text-cardio {
+    background: linear-gradient(135deg, #ff6680, #ff2244);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* --- Botão Cardio --- */
+.btn-cardio {
+    background: rgba(255, 34, 68, 0.15) !important;
+    border-color: rgba(255, 34, 68, 0.5) !important;
+    color: #ff6680 !important;
+}
+
+.btn-cardio:hover {
+    background: rgba(255, 34, 68, 0.3) !important;
+    border-color: var(--cardio) !important;
+    box-shadow: 0 10px 30px var(--cardio-glow) !important;
+}
+
+/* --- Cursor Cardio --- */
+.hovering-cardio #cursor {
+    background: rgba(255, 34, 68, 0.2) !important;
+    border: 1px solid var(--cardio) !important;
+    box-shadow: 0 0 20px var(--cardio-glow) !important;
+}
+
+/* --- Badge Neon Cardio --- */
+.badge-neon {
+    color: var(--cardio);
+}
+
+.pulse-dot {
+    color: var(--cardio);
+}
+
+/* --- Icons Cardio --- */
+.icon-cardio {
+    background: var(--cardio-soft);
+    color: var(--cardio);
+    border: 1px solid rgba(255, 34, 68, 0.3);
+}
+
+/* --- ECG Monitor --- */
+.ecg-monitor {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    height: 130px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ecg-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 34, 68, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 34, 68, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.ecg-svg {
+    width: 100%;
+    height: 80%;
+    position: relative;
+    z-index: 1;
+}
+
+.ecg-path {
+    stroke: var(--cardio);
+    stroke-width: 2;
+    fill: none;
+    filter: drop-shadow(0 0 6px var(--cardio));
+}
+
+/* --- Timeline Dot Cardio --- */
+.timeline-dot {
+    border-color: var(--cardio) !important;
+    box-shadow: 0 0 10px var(--cardio-glow) !important;
+}
+
+/* --- CTA Cardio --- */
+.cta-mega {
+    background: radial-gradient(circle at center, rgba(255, 34, 68, 0.08) 0%, transparent 70%), var(--glass-bg) !important;
+    border-color: rgba(255, 34, 68, 0.2) !important;
+}
+
+.cta-mega::before {
+    background: linear-gradient(90deg, transparent, var(--cardio), transparent) !important;
+}
